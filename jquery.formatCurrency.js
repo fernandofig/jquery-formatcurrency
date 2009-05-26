@@ -31,7 +31,7 @@
 
     $.fn.formatCurrency = function(destination, settings) {
 				
-				if (arguments.length == 1) {
+				if (arguments.length == 1 && typeof destination !== "string") {
 					settings = destination;
 					destination = false;
 				}
