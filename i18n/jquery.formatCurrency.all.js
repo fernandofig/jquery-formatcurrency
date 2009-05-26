@@ -1,4 +1,4 @@
-//  This file is part of the jQuery formatCurrency Plugin.
+ï»¿//  This file is part of the jQuery formatCurrency Plugin.
 //
 //    The jQuery formatCurrency Plugin is free software: you can redistribute it
 //    and/or modify it under the terms of the GNU General Public License as published 
@@ -13,61 +13,60 @@
 //    You should have received a copy of the GNU General Public License along with 
 //    the jQuery formatCurrency Plugin.  If not, see <http://www.gnu.org/licenses/>.
 
-// formatCurrency i18n
 (function($) {
 
-    $.formatCurrency.regions['de'] = {
-        symbol: '€',
-        positiveFormat: '%n %s',
-        negativeFormat: '-%n %s',
-        decimalSymbol: ',',
-        digitGroupSymbol: '.',
-        groupDigits: true
-    };
+	$.formatCurrency.regions['de'] = {
+		symbol: 'â‚¬',
+		positiveFormat: '%n %s',
+		negativeFormat: '-%n %s',
+		decimalSymbol: ',',
+		digitGroupSymbol: '.',
+		groupDigits: true
+	};
 
-    $.formatCurrency.regions['fr'] = {
-        symbol: '€',
-        positiveFormat: '%n %s',
-        negativeFormat: '-%n %s',
-        decimalSymbol: ',',
-        digitGroupSymbol: ' ',
-        groupDigits: true
-    };
+	$.formatCurrency.regions['es'] = {
+		symbol: 'â‚¬',
+		positiveFormat: '%n %s',
+		negativeFormat: '-%n %s',
+		decimalSymbol: ',',
+		digitGroupSymbol: '.',
+		groupDigits: true
+	};
 
-    $.formatCurrency.regions['it'] = {
-        symbol: '€',
-        positiveFormat: '%s %n',
-        negativeFormat: '-%s %n',
-        decimalSymbol: ',',
-        digitGroupSymbol: '.',
-        groupDigits: true
-    };
+	$.formatCurrency.regions['fr'] = {
+		symbol: 'â‚¬',
+		positiveFormat: '%n %s',
+		negativeFormat: '-%n %s',
+		decimalSymbol: ',',
+		digitGroupSymbol: ' ',
+		groupDigits: true
+	};
 
-    $.formatCurrency.regions['es'] = {
-        symbol: '€',
-        positiveFormat: '%n %s',
-        negativeFormat: '-%n %s',
-        decimalSymbol: ',',
-        digitGroupSymbol: '.',
-        groupDigits: true
-    };
+	$.formatCurrency.regions['it'] = {
+		symbol: 'â‚¬',
+		positiveFormat: '%s %n',
+		negativeFormat: '-%s %n',
+		decimalSymbol: ',',
+		digitGroupSymbol: '.',
+		groupDigits: true
+	};
 
-    $.formatCurrency.regions['zh'] = {
-        symbol: '¥',
-        positiveFormat: '%s%n',
-        negativeFormat: '%s-%n',
-        decimalSymbol: '.',
-        digitGroupSymbol: ',',
-        groupDigits: true
-    };
+	$.formatCurrency.regions['ja'] = {
+		symbol: 'Â¥',
+		positiveFormat: '%s%n',
+		negativeFormat: '-%s%n',
+		decimalSymbol: '.',
+		digitGroupSymbol: ',',
+		groupDigits: true
+	};
 
-    $.formatCurrency.regions['ja'] = {
-        symbol: '¥',
-        positiveFormat: '%s%n',
-        negativeFormat: '-%s%n',
-        decimalSymbol: '.',
-        digitGroupSymbol: ',',
-        groupDigits: true
-    };
+	$.formatCurrency.regions['zh'] = {
+		symbol: 'Â¥',
+		positiveFormat: '%s%n',
+		negativeFormat: '%s-%n',
+		decimalSymbol: '.',
+		digitGroupSymbol: ',',
+		groupDigits: true
+	};
 
 })(jQuery);

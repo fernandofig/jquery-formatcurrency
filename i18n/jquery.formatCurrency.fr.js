@@ -1,4 +1,4 @@
-//  This file is part of the jQuery formatCurrency Plugin.
+﻿//  This file is part of the jQuery formatCurrency Plugin.
 //
 //    The jQuery formatCurrency Plugin is free software: you can redistribute it
 //    and/or modify it under the terms of the GNU General Public License as published 
@@ -16,13 +16,13 @@
 // formatCurrency i18n
 (function($) {
 
-    $.formatCurrency.regions['fr'] = {
-        symbol: '�',
-        positiveFormat: '%n %s',
-        negativeFormat: '-%n %s',
-        decimalSymbol: ',',
-        digitGroupSymbol: ' ',
-        groupDigits: true
-    };
+	$.formatCurrency.regions['fr'] = {
+		symbol: '€',
+		positiveFormat: '%n %s',
+		negativeFormat: '-%n %s',
+		decimalSymbol: ',',
+		digitGroupSymbol: ' ',
+		groupDigits: true
+	};
 
 })(jQuery);
