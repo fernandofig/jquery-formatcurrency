@@ -234,5 +234,26 @@ namespace wpf_generator
             if (this.IsLoaded)
                 LoadFiles();
         }
+
+        private void WikiList_Click(object sender, RoutedEventArgs e)
+        {
+            var wiki = new StringBuilder();
+            // Append Header
+            wiki.AppendLine("= Supported Cultures =");
+            wiki.AppendLine();
+            wiki.AppendLine("|| *Code* || *Language* || *Sample* ||");
+
+            foreach(var c in Cultures)
+            {
+                if (!c.IsSelected) continue;
+
+                // Append Item
+                wiki.AppendFormat("|| *{0}* || {1} || {2} ||\n", c.Code, c.Name, c.Currency);
+            }
+
+            // Set it and inform user
+            Clipboard.SetText(wiki.ToString());
+            MessageBox.Show("The Wiki List is in your clipboard, go paste it.");
+        }
     }
 }
