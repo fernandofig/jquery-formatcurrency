@@ -20,7 +20,7 @@ namespace wpf_generator
             DependencyProperty.Register("IsSelected", typeof(bool), typeof(CountryInfo), new UIPropertyMetadata(true));
 
         public string Code { get; set; }
-        public string Name { get; set; }
+        public string Country { get; set; }
         public string Currency { get; set; }
     }
 }

@@ -131,12 +131,12 @@ namespace wpf_generator
                     RegionInfo x = new RegionInfo(countryCode);
                     if (x.EnglishName.Equals(x.NativeName))
                     {
-                        var ci = new CountryInfo { Code = x.TwoLetterISORegionName, Name=x.EnglishName };
+                        var ci = new CountryInfo { Code = x.TwoLetterISORegionName, Country=x.EnglishName };
                         Countries.Add(ci);
                     }
                     else
                     {
-                        var ci = new CountryInfo { Code = x.TwoLetterISORegionName, Name = string.Format("{0} - {1}", x.NativeName, x.EnglishName) };
+                        var ci = new CountryInfo { Code = x.TwoLetterISORegionName, Country = string.Format("{0} - {1}", x.NativeName, x.EnglishName) };
                         Countries.Add(ci);
                     }
                 }
@@ -186,12 +186,12 @@ namespace wpf_generator
                     {
                         if (ci.NativeName.Equals(ci.EnglishName))
                         {
-                            var c = new CountryInfo { Code = ci.Name, Name=ci.EnglishName, Currency=1000.ToString("c", ci.NumberFormat) };
+                            var c = new CountryInfo { Code = ci.Name, Country=ci.EnglishName, Currency=1000.ToString("c", ci.NumberFormat) };
                             _cultures.Add(c);
                         }
                         else
                         {
-                            var c = new CountryInfo { Code = ci.Name, Name = string.Format("{0} - {1}", ci.NativeName, ci.EnglishName), Currency = 1000.ToString("c", ci.NumberFormat) };
+                            var c = new CountryInfo { Code = ci.Name, Country = string.Format("{0} - {1}", ci.NativeName, ci.EnglishName), Currency = 1000.ToString("c", ci.NumberFormat) };
                             _cultures.Add(c);
                         }
 

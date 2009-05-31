@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,8 @@ namespace wpf_generator
     /// </summary>
     public partial class Window1 : Window
     {
+        public static RoutedCommand Sort = new RoutedCommand();
+
         public ObservableCollection<CountryInfo> Cultures
         {
             get { return (ObservableCollection<CountryInfo>)GetValue(CountriesProperty); }
@@ -32,8 +35,6 @@ namespace wpf_generator
         // Using a DependencyProperty as the backing store for Cultures.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CountriesProperty =
             DependencyProperty.Register("Countries", typeof(ObservableCollection<CountryInfo>), typeof(Window1), new UIPropertyMetadata(null));
-
-
 
 
         public ObservableCollection<RegionFileInfo> Files
@@ -46,12 +47,13 @@ namespace wpf_generator
         public static readonly DependencyProperty FilesProperty =
             DependencyProperty.Register("Files", typeof(ObservableCollection<RegionFileInfo>), typeof(Window1), new UIPropertyMetadata(null));
 
+        private CollectionViewSource culturesViewSource;
 
-        
 
         public Window1()
         {
             InitializeComponent();
+            CommandManager.RegisterClassCommandBinding(typeof(Window1), new CommandBinding(Sort, ExecuteSortCultures));
 
             var path = "../";
 #if DEBUG
@@ -64,13 +66,46 @@ namespace wpf_generator
             this.MergeInputFolder.Text = i18nFolder;
 
             LoadCultures();
-            this.GenerateTab.DataContext = Cultures;
+            // wrapped cultures in a CollectionViewSource for sorting
+            culturesViewSource = new CollectionViewSource();
+            culturesViewSource.Source = Cultures;
+            SortCultures("Code");
+            this.GenerateTab.DataContext = culturesViewSource;
 
             LoadFiles();
             this.MergeTab.DataContext = Files;
 
             var licenseFile = io::Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LicenseHeader.txt");
             LoadLicense(licenseFile);
+        }
+
+        private void ExecuteSortCultures(object sender, ExecutedRoutedEventArgs e)
+        {
+            var header = e.OriginalSource as GridViewColumnHeader;
+            if (header == null) return;
+
+            SortCultures(header.Content.ToString());
+        }
+
+        private void SortCultures(string propertyName)
+        {
+            if (culturesViewSource.SortDescriptions.Count == 0)
+            {                
+                culturesViewSource.SortDescriptions.Add(new SortDescription(propertyName, ListSortDirection.Ascending));
+                return;
+            }
+
+            var currentSort = culturesViewSource.SortDescriptions[0];
+            var direction = ListSortDirection.Ascending;
+            if (currentSort.PropertyName == propertyName)
+            {
+                direction = currentSort.Direction == ListSortDirection.Ascending
+                                ? ListSortDirection.Descending
+                                : ListSortDirection.Ascending;
+            }
+
+            culturesViewSource.SortDescriptions.Clear();
+            culturesViewSource.SortDescriptions.Add(new SortDescription(propertyName, direction));
         }
 
         private void LoadCultures()
@@ -90,7 +125,6 @@ namespace wpf_generator
 
             if (!io::Directory.Exists(this.MergeInputFolder.Text))
                 return;
-
 
             foreach (var file in io::Directory.GetFiles(this.MergeInputFolder.Text))
             {
@@ -248,7 +282,7 @@ namespace wpf_generator
                 if (!c.IsSelected) continue;
 
                 // Append Item
-                wiki.AppendFormat("|| *{0}* || {1} || {2} ||\n", c.Code, c.Name, c.Currency);
+                wiki.AppendFormat("|| *{0}* || {1} || {2} ||\n", c.Code, c.Country, c.Currency);
             }
 
             // Set it and inform user
