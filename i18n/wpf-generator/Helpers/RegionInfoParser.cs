@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using io = System.IO;
 
-namespace wpf_generator
+namespace wpf_generator.Helpers
 {
     public static class RegionInfoParser
     {
@@ -16,7 +13,7 @@ namespace wpf_generator
             using (var input = new io::StreamReader(filename, Encoding.UTF8))
             {
                 string line;
-                StringBuilder regionInfo = new StringBuilder();
+                var regionInfo = new StringBuilder();
                 bool outputFlag = false;
                 while((line = input.ReadLine()) != null)
                 {

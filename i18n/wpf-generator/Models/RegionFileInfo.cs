@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace wpf_generator
+namespace wpf_generator.Models
 {
     public class RegionFileInfo : DependencyObject
     {

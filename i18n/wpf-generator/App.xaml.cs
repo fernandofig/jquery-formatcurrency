@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
+using wpf_generator.ViewModels;
 
 namespace wpf_generator
 {
@@ -12,5 +8,11 @@ namespace wpf_generator
     /// </summary>
     public partial class App : Application
     {
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            MainWindow = new Window1();
+            MainWindow.DataContext = new MainWindowViewModel();
+            MainWindow.Show();
+        }
     }
 }

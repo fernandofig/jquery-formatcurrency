@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Globalization;
-using System.Threading;
+using wpf_generator.Models;
 
-namespace wpf_generator
+namespace wpf_generator.Helpers
 {
     public static class Localization
     {
@@ -136,7 +133,7 @@ namespace wpf_generator
                     }
                     else
                     {
-                        var ci = new CountryInfo { Code = x.TwoLetterISORegionName, Country = string.Format("{0} - {1}", x.NativeName, x.EnglishName) };
+                        var ci = new CountryInfo { Code = x.TwoLetterISORegionName, Country = string.Format("{0} - {1}", x.EnglishName, x.NativeName) };
                         Countries.Add(ci);
                     }
                 }
@@ -166,7 +163,7 @@ namespace wpf_generator
                             else
                             {
                                 _SupportedLanguages.Add(ci.TwoLetterISOLanguageName,
-                                                        string.Format("{0} - {1}", ci.NativeName, ci.EnglishName));
+                                                        string.Format("{0} - {1}", ci.EnglishName, ci.NativeName));
                             }
                         }
                     }
@@ -191,7 +188,7 @@ namespace wpf_generator
                         }
                         else
                         {
-                            var c = new CountryInfo { Code = ci.Name, Country = string.Format("{0} - {1}", ci.NativeName, ci.EnglishName), Currency = 1000.ToString("c", ci.NumberFormat) };
+                            var c = new CountryInfo { Code = ci.Name, Country = string.Format("{0} - {1}", ci.EnglishName, ci.NativeName), Currency = 1000.ToString("c", ci.NumberFormat) };
                             _cultures.Add(c);
                         }
 
