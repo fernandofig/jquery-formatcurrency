@@ -1,0 +1,2 @@
+Changes in v1.1
+- Sending a bad element to asNumber causes null exception (unit test added 11.10)

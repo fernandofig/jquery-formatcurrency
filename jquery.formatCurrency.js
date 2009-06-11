@@ -152,7 +152,9 @@
 
         var method = $(this).is('input, select, textarea') ? 'val' : 'html';
         var trimRegex = new RegExp("[^\\d" + settings.decimalSymbol + "-]", "g");
-        var num = $(this)[method]().replace(trimRegex, '');
+        var num = $(this)[method]();
+        num = num ? num : "";
+        num = num.replace(trimRegex, '');
         if (!settings.parse)
             return num;
 

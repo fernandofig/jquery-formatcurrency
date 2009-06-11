@@ -272,6 +272,15 @@ $(function() {
 		$('.toUSchars-end').toNumber();
 		equals($('.toUSchars-end').html(), '100', 'US with chars at end'); 
 		
+		try
+		{
+			$([]).toNumber();
+		}
+		catch(e) {
+			$('.toUSbad-element').html('fail-' + e);
+		}
+		equals($('.toUSbad-element').html(), 'pass', 'bad selector element still works'); 
+		
 	}); 
 	
 	test("can change DE toNumber", function() { 
@@ -325,6 +334,15 @@ $(function() {
 		} catch(e){
 			equals(e, 'invalid parseType', 'US with bad parse type'); 
 		}
+		
+		try
+		{
+			$([]).asNumber();
+		}
+		catch(e) {
+			$('.asUSbad-element').html('fail-' + e);
+		}
+		equals($('.asUSbad-element').html(), 'pass', 'bad selector element still works'); 
 		
 	}); 
 	
