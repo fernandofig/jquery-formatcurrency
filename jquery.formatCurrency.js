@@ -39,9 +39,8 @@
         // initialize defaults
         var defaults = {
             name: "formatCurrency",
-            //useHtml: false,
-            //useHtmlOnDestination: false,
             colorize: false,
+            dropDecimals: false,
             region: '',
             global: true
         };
@@ -85,7 +84,10 @@
                     num = num.substring(0, num.length - (4 * i + 3)) + settings.digitGroupSymbol + num.substring(num.length - (4 * i + 3));
                 }
             }
-            num = num + settings.decimalSymbol + cents;
+            
+            if (!settings.dropDecimals) {
+           	  num = num + settings.decimalSymbol + cents;
+            }
 
 						// format symbol/negative
             var format = isPositive ? settings.positiveFormat : settings.negativeFormat;
@@ -95,7 +97,6 @@
 						// setup destination
 						if (!destination)
 						{
-							//settings.useHtmlOnDestination = settings.useHtml;
 							destination = $this;
 						}
 						else
@@ -103,7 +104,6 @@
 							destination = $(destination);
 						}
 						// set destination
-            //destination[settings.useHtmlOnDestination ? 'html' : 'val'](money);
             destination[destination.is('input, select, textarea') ? 'val' : 'html'](money);
             
             // colorize

@@ -42,6 +42,14 @@ $(function() {
 			equals(this.html(), '^123.00', "symbol: '^'"); 
 		});
 		
+		testFormat('.dropDecimals', { dropDecimals: true }, function() {		
+			equals(this.html(), '$123', "dropDecimal: true"); 
+		});
+		
+		testFormat('.dropDecimalsRounding', { dropDecimals: true }, function() {		
+			equals(this.html(), '$123', "dropDecimal: true (roundDown)"); 
+		});
+		
 		testFormat('.positiveFormat', { positiveFormat:'%s - %n'}, function() {		
 			equals(this.html(), '$ - 123.00', "positiveFormat: '%s - %n'"); 
 		});
