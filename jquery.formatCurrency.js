@@ -42,7 +42,9 @@
             colorize: false,
             dropDecimals: false,
             region: '',
-            global: true
+            global: true,
+            roundToDecimalPlace: 2, // roundToDecimalPlace: -1; for no rounding; 0 to round to the dollar; 1 for one digit cents; 2 for two digit cents; 3 for three digit cents; ...
+            alertOnDecimal: false
         };
         // initialize default region
         defaults = $.extend(defaults, $.formatCurrency.regions['']);
@@ -62,22 +64,31 @@
             var num = '0';
             num = $this[$this.is('input, select, textarea') ? 'val' : 'html']();
 						
+            //identify (123) as a negative number
+            if (num.search('\\(') >= 0)
+                num = '-' + num;
 						// clean number
             var trimRegex = new RegExp("[^\\d" + settings.decimalSymbol + "-]", "g");
             num = num.replace(trimRegex, '');
 						if (settings.decimalSymbol != '.')
-							num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arthmetic
+							num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arithmetic
             if (isNaN(num)) num = '0';
 
 						// format number
             var isPositive = (num == (num = Math.abs(num)));
-            // removed to always round down 
-            // num = Math.floor(num * 100 + 0.50000000001)
-            num = Math.floor(num * 100);
-            var cents = num % 100;
-            num = Math.floor(num / 100).toString();
-
-            if (cents < 10) cents = '0' + cents;
+            var numParts = String(num).split('.');
+            num = numParts[0];
+            var hasDecimals = (numParts.length > 1);
+            var decimals = (hasDecimals ? numParts[1].toString() : '0');
+            if (hasDecimals && settings.alertOnDecimal)
+                alert('Please do not enter any cents! (' + decimals + ')');
+            if (settings.roundToDecimalPlace >= 0) {
+                decimals = parseFloat('0.' + decimals).toFixed(settings.roundToDecimalPlace); // prepend "0."; round
+                if (decimals.substring(0, 1) == '1')
+                    num = Number(num) + 1;
+                decimals = decimals.substring(2); // remove "0."
+            }
+            num = String(num);
 
             if (settings.groupDigits) {
                 for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) {
@@ -86,12 +97,14 @@
             }
             
             if (!settings.dropDecimals) {
-           	  num = num + settings.decimalSymbol + cents;
+                if ( hasDecimals && (settings.roundToDecimalPlace == -1) || (settings.roundToDecimalPlace > 0) ) {
+                    num += settings.decimalSymbol + decimals;
+                }
             }
 
 						// format symbol/negative
             var format = isPositive ? settings.positiveFormat : settings.negativeFormat;
-            var money = format.replace(/%s/g, settings.symbol)
+            var money = format.replace(/%s/g, settings.symbol);
             money = money.replace(/%n/g, num);
 
 						// setup destination

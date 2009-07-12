@@ -1,3 +1,4 @@
 Changes in v1.1
 - Sending a bad element to asNumber causes null exception (unit test added 11.10)
-- Added a dropDecimals setting and accompaning unit-tests.
+- Added a dropDecimals setting and accompanying unit-tests.
+- Added roundToDecimalPlace and alertOnDecimal settings and accompanying unit tests. (from Emmanuel Sambo)
