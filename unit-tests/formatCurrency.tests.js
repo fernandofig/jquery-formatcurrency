@@ -41,8 +41,16 @@ $(function() {
 		testFormat('.symbol', { symbol:'^'}, function() {		
 			equals(this.html(), '^123.00', "symbol: '^'"); 
 		});
-		
-		testFormat('.roundToDecimalPlace3', { roundToDecimalPlace:3}, function() {
+
+		testFormat('.roundToDecimalPlace2Up', { roundToDecimalPlace: 2 }, function() {
+			equals(this.html(), '$124.55', "roundToDecimalPlace: 2 (up)");
+		});
+
+		testFormat('.roundToDecimalPlace2Down', { roundToDecimalPlace: 2 }, function() {
+			equals(this.html(), '$124.55', "roundToDecimalPlace: 2 (down)");
+		});
+
+		testFormat('.roundToDecimalPlace3', { roundToDecimalPlace: 3 }, function() {
 			equals(this.html(), '$123.000', "roundToDecimalPlace: 3");
 		});
 
@@ -90,14 +98,6 @@ $(function() {
 			equals(this.html(), '($123.00)', "negativeBrackets");
 		});
 
-		testFormat('.dropDecimals', { dropDecimals: true }, function() {		
-			equals(this.html(), '$123', "dropDecimal: true"); 
-		});
-		
-		testFormat('.dropDecimalsRounding', { dropDecimals: true }, function() {		
-			equals(this.html(), '$123', "dropDecimal: true (roundDown)"); 
-		});
-		
 		testFormat('.positiveFormat', { positiveFormat:'%s - %n'}, function() {		
 			equals(this.html(), '$ - 123.00', "positiveFormat: '%s - %n'"); 
 		});

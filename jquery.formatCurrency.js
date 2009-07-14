@@ -40,7 +40,6 @@
 		var defaults = {
 			name: "formatCurrency",
 			colorize: false,
-			dropDecimals: false,
 			region: '',
 			global: true,
 			roundToDecimalPlace: 2, // roundToDecimalPlace: -1; for no rounding; 0 to round to the dollar; 1 for one digit cents; 2 for two digit cents; 3 for three digit cents; ...
@@ -97,10 +96,8 @@
 				}
 			}
 
-			if (!settings.dropDecimals) {
-				if ( hasDecimals && (settings.roundToDecimalPlace == -1) || (settings.roundToDecimalPlace > 0) ) {
-					num += settings.decimalSymbol + decimals;
-				}
+			if ( hasDecimals && (settings.roundToDecimalPlace == -1) || (settings.roundToDecimalPlace > 0) ) {
+				num += settings.decimalSymbol + decimals;
 			}
 
 			// format symbol/negative
