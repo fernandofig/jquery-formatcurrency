@@ -27,7 +27,7 @@ $(function() {
 	// module('formatCurrency plugin'); 
 	
 	test("formatCurrency settings", function() { 					
-		// refreshes with textbox caused test to fail.  
+		// refreshes with textbox caused test to fail.
 		// I'm resetting it before it runs
 		$('.val').val('123');
 		testFormat('.val', {}, function() {		
@@ -42,17 +42,17 @@ $(function() {
 			equals(this.html(), '^123.00', "symbol: '^'"); 
 		});
 		
-    testFormat('.roundToDecimalPlace3', { roundToDecimalPlace:3}, function() {
-        equals(this.html(), '$123.000', "roundToDecimalPlace: 3");
-    });
+		testFormat('.roundToDecimalPlace3', { roundToDecimalPlace:3}, function() {
+			equals(this.html(), '$123.000', "roundToDecimalPlace: 3");
+		});
 
-    testFormat('.roundToDecimalPlace0', { roundToDecimalPlace:0}, function() {
-        equals(this.html(), '$124', "roundToDecimalPlace: 0");
-    });
+		testFormat('.roundToDecimalPlace0', { roundToDecimalPlace:0}, function() {
+			equals(this.html(), '$124', "roundToDecimalPlace: 0");
+		});
 
-    testFormat('.roundToDecimalPlace1', { roundToDecimalPlace:1}, function() {
-        equals(this.html(), '$123.9', "roundToDecimalPlace: 1");
-    });
+		testFormat('.roundToDecimalPlace1', { roundToDecimalPlace:1}, function() {
+			equals(this.html(), '$123.9', "roundToDecimalPlace: 1");
+		});
 
 		testFormat('.roundToDecimalPlace0Zeros', { roundToDecimalPlace: 0 }, function() {
 			equals(this.html(), '$124', "roundToDecimalPlace: 0 (zeros)");
@@ -74,21 +74,21 @@ $(function() {
 			equals(this.html(), '-$123', "roundToDecimalPlace: 0 (down -)");
 		});
 
-    testFormat('.roundToDecimalPlace_-1', { roundToDecimalPlace:-1}, function() {
-        equals(this.html(), '$123.456', "roundToDecimalPlace: -1");
-    });
+		testFormat('.roundToDecimalPlace_-1', { roundToDecimalPlace:-1}, function() {
+			equals(this.html(), '$123.456', "roundToDecimalPlace: -1");
+		});
 
-    testFormat('.roundOneUp', {}, function() {
-        equals(this.html(), '$124.00', "roundOneUp");
-    });
+		testFormat('.roundOneUp', {}, function() {
+			equals(this.html(), '$124.00', "roundOneUp");
+		});
 
-    testFormat('.roundOneDown', { negativeFormat:'-%s%n' }, function() {
-        equals(this.html(), '-$124.00', "roundOneDown");
-    });
+		testFormat('.roundOneDown', { negativeFormat:'-%s%n' }, function() {
+			equals(this.html(), '-$124.00', "roundOneDown");
+		});
 
-    testFormat('.negativeBrackets', {}, function() {
-        equals(this.html(), '($123.00)', "negativeBrackets");
-    });
+		testFormat('.negativeBrackets', {}, function() {
+			equals(this.html(), '($123.00)', "negativeBrackets");
+		});
 
 		testFormat('.dropDecimals', { dropDecimals: true }, function() {		
 			equals(this.html(), '$123', "dropDecimal: true"); 
@@ -106,9 +106,9 @@ $(function() {
 			equals(this.html(), 'neg $ - 123.00', "negativeFormat: 'neg %s - %n'"); 
 		});
 		
-    testFormat('.issue2_doNotRound', {}, function() {
-        equals(this.html(), '$9.45', "issue2_doNotRound (9.45)"); 
-    });
+		testFormat('.issue2_doNotRound', {}, function() {
+			equals(this.html(), '$9.45', "issue2_doNotRound (9.45)"); 
+		});
 
 		testFormat('.issue6_doNotRound', {}, function() {
 			equals(this.html(), '$154.20', "issue6_doNotRound (154.20)");
@@ -153,8 +153,8 @@ $(function() {
 		});
 	});
 	
-	test("can format US currency", function() { 					
-		// refreshes with textbox caused test to fail.  
+	test("can format US currency", function() {
+		// refreshes with textbox caused test to fail
 		// I'm resetting it before it runs
 		$('.UStext').val('1000');
 		testFormat('.UStext', {}, function() {		
@@ -181,13 +181,13 @@ $(function() {
 			equals(this.html(), '($1,000.00)', 'US negative'); 
 		});	
 		
-    testFormat('.USextra-decimals-roundDown', {}, function() {
-        equals(this.html(), '$1,000.05', 'US with extra decimals rounded down');
-    });
+		testFormat('.USextra-decimals-roundDown', {}, function() {
+			equals(this.html(), '$1,000.05', 'US with extra decimals rounded down');
+		});
 
-    testFormat('.USextra-decimals-roundUp', {}, function() {
-        equals(this.html(), '$1,000.06', 'US with extra decimals rounds up'); 
-    });
+		testFormat('.USextra-decimals-roundUp', {}, function() {
+			equals(this.html(), '$1,000.06', 'US with extra decimals rounds up'); 
+		});
 		
 		testFormat('.USwith-chars', {}, function() {		
 			equals(this.html(), '$1,000.05', 'US with characters'); 
