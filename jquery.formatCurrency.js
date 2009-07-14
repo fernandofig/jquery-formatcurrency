@@ -83,8 +83,9 @@
             if (hasDecimals && settings.alertOnDecimal)
                 alert('Please do not enter any cents! (' + decimals + ')');
             if (settings.roundToDecimalPlace >= 0) {
-                decimals = parseFloat('0.' + decimals).toFixed(settings.roundToDecimalPlace); // prepend "0."; round
-                if (decimals.substring(0, 1) == '1')
+                decimals = parseFloat('1.' + decimals); // prepend "0."; (IE does NOT round 0.50.toFixed(0) up, but (1+0.50).toFixed(0)-1
+                decimals = decimals.toFixed(settings.roundToDecimalPlace); // round
+                if (decimals.substring(0, 1) == '2')
                     num = Number(num) + 1;
                 decimals = decimals.substring(2); // remove "0."
             }

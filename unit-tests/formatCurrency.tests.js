@@ -50,9 +50,29 @@ $(function() {
         equals(this.html(), '$124', "roundToDecimalPlace: 0");
     });
 
-    testFormat('.roundToDecimalPlace9', { roundToDecimalPlace:1}, function() {
+    testFormat('.roundToDecimalPlace1', { roundToDecimalPlace:1}, function() {
         equals(this.html(), '$123.9', "roundToDecimalPlace: 1");
     });
+
+		testFormat('.roundToDecimalPlace0Zeros', { roundToDecimalPlace: 0 }, function() {
+			equals(this.html(), '$124', "roundToDecimalPlace: 0 (zeros)");
+		});
+
+		testFormat('.roundToDecimalPlace0Up', { roundToDecimalPlace: 0 }, function() {
+			equals(this.html(), '$124', "roundToDecimalPlace: 0 (up)");
+		});
+
+		testFormat('.roundToDecimalPlace0Down', { roundToDecimalPlace: 0 }, function() {
+			equals(this.html(), '$123', "roundToDecimalPlace: 0 (down)");
+		});
+
+		testFormat('.roundToDecimalPlace0NegativeUp', { roundToDecimalPlace:0, negativeFormat:'-%s%n'}, function() {
+			equals(this.html(), '-$124', "roundToDecimalPlace: 0 (up -)");
+		});
+
+		testFormat('.roundToDecimalPlace0NegativeDown', { roundToDecimalPlace:0, negativeFormat:'-%s%n'}, function() {
+			equals(this.html(), '-$123', "roundToDecimalPlace: 0 (down -)");
+		});
 
     testFormat('.roundToDecimalPlace_-1', { roundToDecimalPlace:-1}, function() {
         equals(this.html(), '$123.456', "roundToDecimalPlace: -1");
@@ -86,9 +106,13 @@ $(function() {
 			equals(this.html(), 'neg $ - 123.00', "negativeFormat: 'neg %s - %n'"); 
 		});
 		
-    testFormat('.doNotRound', {}, function() {
-        equals(this.html(), '$9.45', "doNotRound"); 
+    testFormat('.issue2_doNotRound', {}, function() {
+        equals(this.html(), '$9.45', "issue2_doNotRound (9.45)"); 
     });
+
+		testFormat('.issue6_doNotRound', {}, function() {
+			equals(this.html(), '$154.20', "issue6_doNotRound (154.20)");
+		});
 
 		testFormat('.decimalSymbol', { decimalSymbol:'^'}, function() {		
 			equals(this.html(), '$123^00', "decimalSymbol: '^'"); 
