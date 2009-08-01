@@ -30,7 +30,7 @@
 	};
 
 	$.fn.formatCurrency = function(destination, settings) {
-				
+
 		if (arguments.length == 1 && typeof destination !== "string") {
 			settings = destination;
 			destination = false;
@@ -43,7 +43,7 @@
 			region: '',
 			global: true,
 			roundToDecimalPlace: 2, // roundToDecimalPlace: -1; for no rounding; 0 to round to the dollar; 1 for one digit cents; 2 for two digit cents; 3 for three digit cents; ...
-			alertOnDecimal: false
+			eventOnDecimalsEntered: false
 		};
 		// initialize default region
 		defaults = $.extend(defaults, $.formatCurrency.regions['']);
@@ -61,7 +61,7 @@
 			// get number
 			var num = '0';
 			num = $this[$this.is('input, select, textarea') ? 'val' : 'html']();
-						
+
 			//identify (123) as a negative number
 			if (num.search('\\(') >= 0)
 				num = '-' + num;
@@ -74,13 +74,12 @@
 			if (isNaN(num)) num = '0';
 
 			// format number
-			var isPositive = (num == (num = Math.abs(num)));
 			var numParts = String(num).split('.');
+			// var hasDecimalPoint = String(num).indexOf('.') >= 0;
 			num = numParts[0];
+			var isPositive = (num == (num = Math.abs(num)));
 			var hasDecimals = (numParts.length > 1);
 			var decimals = (hasDecimals ? numParts[1].toString() : '0');
-			if (hasDecimals && settings.alertOnDecimal)
-				alert('Please do not enter any cents! (' + decimals + ')');
 			if (settings.roundToDecimalPlace >= 0) {
 				decimals = parseFloat('1.' + decimals); // prepend "0."; (IE does NOT round 0.50.toFixed(0) up, but (1+0.50).toFixed(0)-1
 				decimals = decimals.toFixed(settings.roundToDecimalPlace); // round
@@ -96,7 +95,7 @@
 				}
 			}
 
-			if ( hasDecimals && (settings.roundToDecimalPlace == -1) || (settings.roundToDecimalPlace > 0) ) {
+			if ((hasDecimals && settings.roundToDecimalPlace == -1) || settings.roundToDecimalPlace > 0) {
 				num += settings.decimalSymbol + decimals;
 			}
 
@@ -113,6 +112,9 @@
 			}
 			// set destination
 			destination[destination.is('input, select, textarea') ? 'val' : 'html'](money);
+
+			if (hasDecimals && settings.eventOnDecimalsEntered)
+				destination.trigger('decimalsEntered', decimals);
 
 			// colorize
 			if (settings.colorize)
@@ -166,10 +168,10 @@
 
 		if (num.length == 0)
 			num = '0';
-		
+
 		if (settings.decimalSymbol != '.')
 			num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arthmetic
-				
+
 		return window['parse' + settings.parseType](num);
 	};
 
@@ -189,8 +191,7 @@
 	}
 
 	function validateParseType(parseType) {
-		switch(parseType.toLowerCase())
-		{
+		switch (parseType.toLowerCase()) {
 			case 'int':
 				return 'Int';
 			case 'float':

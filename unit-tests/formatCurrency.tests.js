@@ -86,6 +86,26 @@ $(function() {
 			equals(this.html(), '$123.456', "roundToDecimalPlace: -1");
 		});
 
+		testFormat('.noRounding', { roundToDecimalPlace: -1 }, function() {
+			equals(this.html(), '$123.456', "No rounding");
+		});
+
+		testFormat('.keepTrailingZeros', { roundToDecimalPlace: -1 }, function() {
+			equals(this.html(), '$124.0000', "Keep trailing zeros");
+		});
+
+		testFormat('.noTrailingDecimal', { roundToDecimalPlace: 0 }, function() {
+			equals(this.html(), '$123', "noTrailingDecimal");
+		});
+
+		$('.warnOnDecimalsEntered').bind('decimalsEntered', function(e, cents) {
+			$('.warnOnDecimalsEnteredNotification').html('Please do not enter any cents!');
+		});
+		testFormat('.warnOnDecimalsEntered', { roundToDecimalPlace: 0, eventOnDecimalsEntered: true }, function() {
+			equals(this.html(), '$123', "warnOnDecimalsEntered");
+			equals($('.warnOnDecimalsEnteredNotification').html(), 'Please do not enter any cents!', "Warn on decimals entered notification");
+		});
+
 		testFormat('.roundOneUp', {}, function() {
 			equals(this.html(), '$124.00', "roundOneUp");
 		});

@@ -4,3 +4,4 @@ Changes in v1.1
 - Added roundToDecimalPlace and alertOnDecimal settings and accompanying unit tests. (from Emmanuel Sambo)
 - Fix rounding error in Internet Explorer
 - Remove dropDecimals in favor for roundToDecimalPlace
+- Use custom event to warn about decimals entered, if enabled
