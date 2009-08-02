@@ -42,48 +42,48 @@ $(function() {
 			equals(this.html(), '^123.00', "symbol: '^'"); 
 		});
 
-		testFormat('.roundToDecimalPlace2Up', { roundToDecimalPlace: 2 }, function() {
-			equals(this.html(), '$124.55', "roundToDecimalPlace: 2 (up)");
+		testFormat('.roundUp', { roundToDecimalPlace: 2 }, function() {
+			equals(this.html(), '$124.55', "Round up");
 		});
 
-		testFormat('.roundToDecimalPlace2Down', { roundToDecimalPlace: 2 }, function() {
-			equals(this.html(), '$124.55', "roundToDecimalPlace: 2 (down)");
+		testFormat('.roundDown', { roundToDecimalPlace: 2 }, function() {
+			equals(this.html(), '$124.55', "Round down");
 		});
 
-		testFormat('.roundToDecimalPlace3', { roundToDecimalPlace: 3 }, function() {
-			equals(this.html(), '$123.000', "roundToDecimalPlace: 3");
+		testFormat('.threeDecimals', { roundToDecimalPlace: 3 }, function() {
+			equals(this.html(), '$123.000', "Three decimals");
 		});
 
-		testFormat('.roundToDecimalPlace0', { roundToDecimalPlace:0}, function() {
-			equals(this.html(), '$124', "roundToDecimalPlace: 0");
+		testFormat('.noDecimals', { roundToDecimalPlace: 0}, function() {
+			equals(this.html(), '$124', "No decimals left after rounding");
 		});
 
-		testFormat('.roundToDecimalPlace1', { roundToDecimalPlace:1}, function() {
-			equals(this.html(), '$123.9', "roundToDecimalPlace: 1");
+		testFormat('.oneDecimal', { roundToDecimalPlace: 1}, function() {
+			equals(this.html(), '$123.9', "One decimal");
 		});
 
-		testFormat('.roundToDecimalPlace0Zeros', { roundToDecimalPlace: 0 }, function() {
-			equals(this.html(), '$124', "roundToDecimalPlace: 0 (zeros)");
+		testFormat('.roundToDollar', { roundToDecimalPlace: 0 }, function() {
+			equals(this.html(), '$124', "Round to dollar");
 		});
 
-		testFormat('.roundToDecimalPlace0Up', { roundToDecimalPlace: 0 }, function() {
-			equals(this.html(), '$124', "roundToDecimalPlace: 0 (up)");
+		testFormat('.roundUpToDollar', { roundToDecimalPlace: 0 }, function() {
+			equals(this.html(), '$124', "Round up to dollar");
 		});
 
-		testFormat('.roundToDecimalPlace0Down', { roundToDecimalPlace: 0 }, function() {
-			equals(this.html(), '$123', "roundToDecimalPlace: 0 (down)");
+		testFormat('.roundDownToDollar', { roundToDecimalPlace: 0 }, function() {
+			equals(this.html(), '$123', "Round down to dollar");
 		});
 
-		testFormat('.roundToDecimalPlace0NegativeUp', { roundToDecimalPlace:0, negativeFormat:'-%s%n'}, function() {
-			equals(this.html(), '-$124', "roundToDecimalPlace: 0 (up -)");
+		testFormat('.roundUpToNegativeDollar', { roundToDecimalPlace: 0, negativeFormat: '-%s%n'}, function() {
+			equals(this.html(), '-$124', "Round up to negative dollar");
 		});
 
-		testFormat('.roundToDecimalPlace0NegativeDown', { roundToDecimalPlace:0, negativeFormat:'-%s%n'}, function() {
-			equals(this.html(), '-$123', "roundToDecimalPlace: 0 (down -)");
+		testFormat('.roundDownToNegativeDollar', { roundToDecimalPlace: 0, negativeFormat: '-%s%n'}, function() {
+			equals(this.html(), '-$123', "Round down to negative dollar");
 		});
 
-		testFormat('.roundToDecimalPlace_-1', { roundToDecimalPlace:-1}, function() {
-			equals(this.html(), '$123.456', "roundToDecimalPlace: -1");
+		testFormat('.doNotAddZeroCentsOnDollar', { roundToDecimalPlace: -1 }, function() {
+			equals(this.html(), '$123', "Do not add zero cent on dollar");
 		});
 
 		testFormat('.noRounding', { roundToDecimalPlace: -1 }, function() {
