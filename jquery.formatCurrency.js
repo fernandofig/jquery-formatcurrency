@@ -105,20 +105,21 @@
 			money = money.replace(/%n/g, num);
 
 			// setup destination
+			var $destination = $([]);
 			if (!destination) {
-				destination = $this;
+				$destination = $this;
 			} else {
-				destination = $(destination);
+				$destination = $(destination);
 			}
 			// set destination
-			destination[destination.is('input, select, textarea') ? 'val' : 'html'](money);
+			$destination[$destination.is('input, select, textarea') ? 'val' : 'html'](money);
 
 			if (hasDecimals && settings.eventOnDecimalsEntered)
-				destination.trigger('decimalsEntered', decimals);
+				$destination.trigger('decimalsEntered', decimals);
 
 			// colorize
 			if (settings.colorize)
-				destination.css('color', isPositive ? 'black' : 'red');
+				$destination.css('color', isPositive ? 'black' : 'red');
 		});
 	};
 

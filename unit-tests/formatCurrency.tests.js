@@ -171,6 +171,10 @@ $(function() {
 		testFormat('.regionFullFallback', { region:'badRegion'}, function() {		
 			equals(this.html(), '$1,000.00', "region: 'badRegion' should fallback to '' (default)"); 
 		});
+		
+		testFormat('.multiDest', { }, function() {		
+			equals($('.multiDest2').html(), $('.multiDest1').html(), "can format multiple destinations"); 
+		});
 	});
 	
 	test("can format US currency", function() {

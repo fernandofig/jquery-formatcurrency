@@ -5,3 +5,4 @@ Changes in v1.1
 - Fix rounding error in Internet Explorer
 - Remove dropDecimals in favor for roundToDecimalPlace
 - Use custom event to warn about decimals entered, if enabled
+- fixed but where only the first selector match was being set
