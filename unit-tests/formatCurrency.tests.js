@@ -126,6 +126,10 @@ $(function() {
 			equals(this.html(), 'neg $ - 123.00', "negativeFormat: 'neg %s - %n'"); 
 		});
 		
+		testFormat('.negativeFormatDecimal', { negativeFormat:'neg %s - %n'}, function() {		
+			equals(this.html(), 'neg $ - 0.25', "negativeFormat Decimal: 'neg %s - %n'"); 
+		});
+		
 		testFormat('.issue2_doNotRound', {}, function() {
 			equals(this.html(), '$9.45', "issue2_doNotRound (9.45)"); 
 		});
@@ -175,6 +179,11 @@ $(function() {
 		testFormat('.multiDest', { }, function() {		
 			equals($('.multiDest2').html(), $('.multiDest1').html(), "can format multiple destinations"); 
 		});
+		
+		testFormat('.blankShouldBeBlank', { }, function() {		
+			equals($('.blankShouldBeBlank').html(), '', "blank should return blank"); 
+		});
+		
 	});
 	
 	test("can format US currency", function() {

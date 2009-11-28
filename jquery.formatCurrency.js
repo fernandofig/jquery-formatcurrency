@@ -69,17 +69,23 @@
 			// clean number
 			var trimRegex = new RegExp("[^\\d" + settings.decimalSymbol + "-]", "g");
 			num = num.replace(trimRegex, '');
+			
+			if (num === '')
+				return;
+			
 			if (settings.decimalSymbol != '.')
 				num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arithmetic
 			if (isNaN(num)) num = '0';
 
+			var isPositive = (num == Math.abs(num));
+			
 			// format number
 			var numParts = String(num).split('.');
 			// var hasDecimalPoint = String(num).indexOf('.') >= 0;
-			num = numParts[0];
-			var isPositive = (num == (num = Math.abs(num)));
+			num = Math.abs(numParts[0]);
 			var hasDecimals = (numParts.length > 1);
 			var decimals = (hasDecimals ? numParts[1].toString() : '0');
+			var originalDecimals = decimals;
 			if (settings.roundToDecimalPlace >= 0) {
 				decimals = parseFloat('1.' + decimals); // prepend "0."; (IE does NOT round 0.50.toFixed(0) up, but (1+0.50).toFixed(0)-1
 				decimals = decimals.toFixed(settings.roundToDecimalPlace); // round
@@ -115,7 +121,7 @@
 			$destination[$destination.is('input, select, textarea') ? 'val' : 'html'](money);
 
 			if (hasDecimals && settings.eventOnDecimalsEntered)
-				$destination.trigger('decimalsEntered', decimals);
+				$destination.trigger('decimalsEntered', originalDecimals);
 
 			// colorize
 			if (settings.colorize)

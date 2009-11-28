@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Format Currency Sample - Format as you type</title>
+	<style type="text/css">
+		body, div  { margin:0px auto; padding:0px; }
+
+		.main { margin:40px; }
+		
+		.instructions { font-style:italic; }
+		
+		.sample { float:left; margin:10px; padding:4px; border:1px solid #888; width:380px; min-height:100px; }
+		
+		.sample h3 { margin:-4px; margin-bottom:10px; padding:4px; background:#555; color:#eee; }
+		
+		.sample div { clear:both; }
+		.sample input { float:left; margin:0px auto; }
+		
+		.message { color:#f00; font-size:.8em; }
+		
+		.log { width:790px; clear:both; }
+			
+		.log h3 { background:#966; }
+		#clearLog { float:right; }
+	</style>
+	<script type="text/javascript" src="../external/jquery-1.3.2.min.js"></script>
+	<script type="text/javascript" src="../jquery.formatCurrency.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			// jQuery formatCurrency plugin: http://plugins.jquery.com/project/formatCurrency
+
+			// Format while typing & warn on decimals entered, 2 decimal places
+			$('#formatWhileTypingAndWarnOnDecimalsEntered2').blur(function() {
+				$('#formatWhileTypingAndWarnOnDecimalsEnteredNotification2').html(null);
+				$(this).formatCurrency({ colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: 2 });
+			})
+			.keyup(function(e) {
+				var e = window.event || e;
+				var keyUnicode = e.charCode || e.keyCode;
+				if (e !== undefined) {
+					switch (keyUnicode) {
+						case 27: this.value = ''; break; // Esc
+						case 37: break; // cursor left
+						case 38: break; // cursor up
+						case 39: break; // cursor right
+						case 40: break; // cursor down
+						case 78: break; // N (Opera 9.63+ maps the "." from the number key section to the "N" key too!) (See: http://unixpapa.com/js/key.html search for ". Del")
+						case 110: break; // . number block (Opera 9.63+ maps the "." from the number block to the "N" key (78) !!!)
+						case 190: break; // .
+						default: $(this).formatCurrency({ colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+					}
+				}
+			})
+			.bind('decimalsEntered', function(e, cents) {
+				if (String(cents).length > 2) {
+					var errorMsg = 'Please do not enter any cents (0.' + cents + ')';
+					$('#formatWhileTypingAndWarnOnDecimalsEnteredNotification2').html(errorMsg);
+					log('Event on decimals entered: ' + errorMsg);
+				}
+			});
+
+
+			// Warn on decimals entered, 2 decimal places
+			$('#warnOnDecimalsEntered2').blur(function() {
+				$('#warnOnDecimalsEnteredNotification2').html(null);
+				$(this).formatCurrency({ roundToDecimalPlace: 2, eventOnDecimalsEntered: true });
+			})
+			.bind('decimalsEntered', function(e, cents) {
+				if (String(cents).length > 2) {
+					var errorMsg = 'Please do not enter any cents (0.' + cents + ')';
+					$('#warnOnDecimalsEnteredNotification2').html(errorMsg);
+					log('Event on decimals entered: ' + errorMsg);
+				}
+			});
+
+
+			// Format while typing & warn on decimals entered, no cents
+			$('#formatWhileTypingAndWarnOnDecimalsEntered').blur(function() {
+				$('#formatWhileTypingAndWarnOnDecimalsEnteredNotification').html(null);
+				$(this).formatCurrency({ colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: 0 });
+			})
+			.keyup(function(e) {
+				var e = window.event || e;
+				var keyUnicode = e.charCode || e.keyCode;
+				if (e !== undefined) {
+					switch (keyUnicode) {
+						case 27: this.value = ''; break; // Esc
+						case 37: break; // cursor left
+						case 38: break; // cursor up
+						case 39: break; // cursor right
+						case 40: break; // cursor down
+						case 78: break; // N (Opera 9.63+ maps the "." from the number key section to the "N" key too!) (See: http://unixpapa.com/js/key.html search for ". Del")
+						case 110: break; // . number block (Opera 9.63+ maps the "." from the number block to the "N" key (78) !!!)
+						case 190: break; // .
+						default: $(this).formatCurrency({ colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+					}
+				}
+			})
+			.bind('decimalsEntered', function(e, cents) {
+				var errorMsg = 'Please do not enter any cents (0.' + cents + ')';
+				$('#formatWhileTypingAndWarnOnDecimalsEnteredNotification').html(errorMsg);
+				log('Event on decimals entered: ' + errorMsg);
+			});
+
+
+			// Warn on decimals entered, no cents
+			$('#warnOnDecimalsEntered').blur(function() {
+				$('#warnOnDecimalsEnteredNotification').html(null);
+				$(this).formatCurrency({ roundToDecimalPlace: 0, eventOnDecimalsEntered: true });
+			})
+			.bind('decimalsEntered', function(e, cents) {
+				var errorMsg = 'Please do not enter any cents (0.' + cents + ')';
+				$('#warnOnDecimalsEnteredNotification').html(errorMsg);
+				log('Event on decimals entered: ' + errorMsg);
+			});
+
+
+			function log(text) {
+				$('#divLog').prepend('<div>' + text + '</div>');
+			}
+			
+			$('#clearLog').click(function() {
+				$('#divLog').empty();
+			});
+
+		});
+	</script>
+
+</head>
+<body>
+	<div class="main">
+		<h1>Format Currency Sample - <span style="font-size:.7em">Format as you type</span></h1>
+		<p class="instructions">
+			Type "123456.789" into the fields below to see the formatting
+		</p>
+		
+		<div class="sample">
+			<h3>Round to 2 decimal places</h3>
+			
+			<div>Format while typing & warn on decimals entered</div>
+			<input type="text" id="formatWhileTypingAndWarnOnDecimalsEntered2" />
+			<span id="formatWhileTypingAndWarnOnDecimalsEnteredNotification2" class="message"></span>
+			
+			<div>Warn on decimals entered</div>
+			<input type="text" id="warnOnDecimalsEntered2" />
+			<span id="warnOnDecimalsEnteredNotification2" class="message"></span>
+		</div>
+		
+		<div class="sample">
+			<h3>No Decimals</h3>
+			
+			<div>Format while typing & warn on decimals entered</div>
+			<input type="text" id="formatWhileTypingAndWarnOnDecimalsEntered" />
+			<span id="formatWhileTypingAndWarnOnDecimalsEnteredNotification" class="message"></span>
+		
+			<div>Warn on decimals entered</div>
+			<input type="text" id="warnOnDecimalsEntered" />
+			<span id="warnOnDecimalsEnteredNotification" class="message"></span>
+		</div>
+		
+		<div class="sample log">
+			<input type="button" id="clearLog" value="clear" />
+			<h3>Log</h3>
+			<br />
+			<div id="divLog"></div>
+		</div>
+		
+	</div>
+</body>
+</html>

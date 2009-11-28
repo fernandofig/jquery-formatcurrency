@@ -8,4 +8,7 @@ Changes in v1.1
 - fixed but where only the first selector match was being set (unit test added 37) (issue #7)
 
 Changes in v1.2
-- 
+- Stored originalDecimals for reporting on the decimalsEntered trigger
+- Added format_as_you_type demo page (from Emmanuel Sambo)
+- Fixed issue #11 blank should equal blank
+- Fixed bug #12 and added unit test (negativeFormatDecimal) to support
