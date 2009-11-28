@@ -77,15 +77,15 @@
 				num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arithmetic
 			if (isNaN(num)) num = '0';
 
-			var isPositive = (num == Math.abs(num));
-			
-			// format number
+			// evalutate number input
 			var numParts = String(num).split('.');
-			// var hasDecimalPoint = String(num).indexOf('.') >= 0;
-			num = Math.abs(numParts[0]);
+			var isPositive = (num == Math.abs(num));
 			var hasDecimals = (numParts.length > 1);
 			var decimals = (hasDecimals ? numParts[1].toString() : '0');
 			var originalDecimals = decimals;
+			
+			// format number
+			num = Math.abs(numParts[0]);
 			if (settings.roundToDecimalPlace >= 0) {
 				decimals = parseFloat('1.' + decimals); // prepend "0."; (IE does NOT round 0.50.toFixed(0) up, but (1+0.50).toFixed(0)-1
 				decimals = decimals.toFixed(settings.roundToDecimalPlace); // round
