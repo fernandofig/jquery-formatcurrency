@@ -24,6 +24,15 @@
 		groupDigits: true
 	};
 
+	$.formatCurrency.regions['en-IN'] = {
+		symbol: 'Rs.',
+		positiveFormat: '%s %n',
+		negativeFormat: '%s -%n',
+		decimalSymbol: '.',
+		digitGroupSymbol: ',',
+		groupDigits: true
+	};
+	
 	$.formatCurrency.regions['es'] = {
 		symbol: '€',
 		positiveFormat: '%n %s',

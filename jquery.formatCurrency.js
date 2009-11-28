@@ -54,6 +54,7 @@
 		if (settings.region.length > 0) {
 			settings = $.extend(settings, getRegionOrCulture(settings.region));
 		}
+		settings.regex = generateRegex(settings);
 
 		return this.each(function() {
 			$this = $(this);
@@ -73,8 +74,7 @@
 			if (isNaN(num))
 			{
 				// clean number
-				var trimRegex = new RegExp("[^\\d" + settings.decimalSymbol + "-]", "g");
-				num = num.replace(trimRegex, '');
+				num = num.replace(settings.regex, '');
 				
 				if (num === '')
 					return;
@@ -83,6 +83,7 @@
 					num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arithmetic
 				if (isNaN(num)) num = '0';
 			}
+			
 			// evalutate number input
 			var numParts = String(num).split('.');
 			var isPositive = (num == Math.abs(num));
@@ -147,11 +148,11 @@
 		if (settings.region.length > 0) {
 			settings = $.extend(settings, getRegionOrCulture(settings.region));
 		}
+		settings.regex = generateRegex(settings);
 
 		return this.each(function() {
 			var method = $(this).is('input, select, textarea') ? 'val' : 'html';
-			var trimRegex = new RegExp("[^\\d" + settings.decimalSymbol + "-]", "g");
-			$(this)[method]($(this)[method]().replace(trimRegex, ''));
+			$(this)[method]($(this)[method]().replace(settings.regex, ''));
 		});
 	};
 
@@ -168,14 +169,13 @@
 		if (settings.region.length > 0) {
 			settings = $.extend(settings, getRegionOrCulture(settings.region));
 		}
-
+		settings.regex = generateRegex(settings);
 		settings.parseType = validateParseType(settings.parseType);
 
 		var method = $(this).is('input, select, textarea') ? 'val' : 'html';
-		var trimRegex = new RegExp("[^\\d" + settings.decimalSymbol + "-]", "g");
 		var num = $(this)[method]();
 		num = num ? num : "";
-		num = num.replace(trimRegex, '');
+		num = num.replace(settings.regex, '');
 		if (!settings.parse)
 			return num;
 
@@ -212,6 +212,12 @@
 			default:
 				throw 'invalid parseType';
 		}
+	}
+	
+	function generateRegex(settings) {
+		var symbol = settings.symbol.replace('$', '\\$').replace('.', '\\.');
+		
+		return new RegExp(symbol + "|[^\\d" + settings.decimalSymbol + "-]", "g");
 	}
 
 })(jQuery);

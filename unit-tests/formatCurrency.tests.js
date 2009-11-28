@@ -24,7 +24,7 @@ function testFormat(selector, settings, test) {
 
 $(function() { 
 	// comments out becuase its noise.
-	// module('formatCurrency plugin'); 
+	module('formatCurrency'); 
 	
 	test("formatCurrency settings", function() { 					
 		// refreshes with textbox caused test to fail.
@@ -264,6 +264,24 @@ $(function() {
 		});	
 	}); 
 	
+	test("can format en-IN currency", function() { 
+		testFormat('.EnIN', { region: 'en-IN' }, function() {		
+			equals(this.html(), 'Rs. 1,000.00', 'en-IN'); 
+		});	
+		
+		testFormat('.EnINwithSymbol', { region: 'en-IN' }, function() {		
+			equals(this.html(), 'Rs. 1,000.00', 'en-IN already formatted'); 
+		});	
+		
+		testFormat('.EnINdecimal', { region: 'en-IN' }, function() {		
+			equals(this.html(), 'Rs. 1,000.33', 'en-IN with decimal'); 
+		});	
+		
+		testFormat('.EnINneg', { region: 'en-IN' }, function() {		
+			equals(this.html(), 'Rs. -1,000.00', 'en-IN with negative'); 
+		});	
+	});
+	
 	test("can format FR currency", function() { 
 		testFormat('.FR', { region: 'fr' }, function() {		
 			equals(this.html(), '1 000,00 €', 'FR'); 
@@ -354,7 +372,7 @@ $(function() {
 		});	
 	}); 
 	
-	
+	module('toNumber'); 
 	test("can change US toNumber", function() { 
 		
 		$('.toVal').toNumber();
@@ -402,7 +420,23 @@ $(function() {
 		
 	}); 
 	
+	test("can change en-IN toNumber", function() { 
+		
+		$('.toEnIN').toNumber({ region: 'en-IN' });
+		equals($('.toEnIN').html(), '1234.56', 'en-IN'); 
+		
+		$('.toEnINformatted').toNumber({ region: 'en-IN' });
+		equals($('.toEnINformatted').html(), '1234.56', 'en-IN formatted'); 
+		
+		$('.toEnINwhole').toNumber({ region: 'en-IN' });
+		equals($('.toEnINwhole').html(), '1000', 'en-IN whole number'); 
+		
+		$('.toEnINdecimal').toNumber({ region: 'en-IN' });
+		equals($('.toEnINdecimal').html(), '1000.11', 'en-IN decimal'); 
+		
+	}); 
 	
+	module('asNumber'); 
 	test("can get US asNumber", function() { 
 		
 		var val = 0;
@@ -464,6 +498,24 @@ $(function() {
 		
 		val = $('.asDEdecimal').asNumber({ region: 'de' });
 		equals(val, 1000.11, 'DE decimal'); 
+	
+	}); 
+	
+	test("can get en-IN asNumber", function() { 
+		
+		var val = 0;
+			
+		val = $('.asEnIN').asNumber({ region: 'en-IN' });
+		equals(val, 1234.56, 'en-IN parse'); 
+		
+		val = $('.asEnINformatted').asNumber({ region: 'en-IN' });
+		equals(val, 1234.56, 'en-IN formatted'); 
+		
+		val = $('.asEnINwhole').asNumber({ region: 'en-IN' });
+		equals(val, 1000, 'en-IN whole'); 
+		
+		val = $('.asEnINdecimal').asNumber({ region: 'en-IN' });
+		equals(val, 1000.11, 'en-IN decimal'); 
 	
 	}); 
 	
