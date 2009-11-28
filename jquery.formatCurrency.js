@@ -66,17 +66,23 @@
 			if (num.search('\\(') >= 0)
 				num = '-' + num;
 
-			// clean number
-			var trimRegex = new RegExp("[^\\d" + settings.decimalSymbol + "-]", "g");
-			num = num.replace(trimRegex, '');
-			
 			if (num === '')
-				return;
-			
-			if (settings.decimalSymbol != '.')
-				num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arithmetic
-			if (isNaN(num)) num = '0';
+					return;
 
+			// if the number is valid use it, otherwise clean it
+			if (isNaN(num))
+			{
+				// clean number
+				var trimRegex = new RegExp("[^\\d" + settings.decimalSymbol + "-]", "g");
+				num = num.replace(trimRegex, '');
+				
+				if (num === '')
+					return;
+				
+				if (settings.decimalSymbol != '.')
+					num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arithmetic
+				if (isNaN(num)) num = '0';
+			}
 			// evalutate number input
 			var numParts = String(num).split('.');
 			var isPositive = (num == Math.abs(num));
