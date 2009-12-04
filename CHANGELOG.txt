@@ -17,3 +17,4 @@ Changes in v1.2
 
 Changes in v1.3
 - Fixed bug #15 and added unit test, changed generateRegex function to check for blank symbol.
+- Added explicit open/closing {} on all if statements

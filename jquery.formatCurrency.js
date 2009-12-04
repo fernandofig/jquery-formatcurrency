@@ -63,16 +63,17 @@
 			var num = '0';
 			num = $this[$this.is('input, select, textarea') ? 'val' : 'html']();
 
-			//identify (123) as a negative number
-			if (num.search('\\(') >= 0)
+			//identify '(123)' as a negative number
+			if (num.search('\\(') >= 0) {
 				num = '-' + num;
+			}
 
-			if (num === '')
-					return;
+			if (num === '') {
+				return;
+			}
 
 			// if the number is valid use it, otherwise clean it
-			if (isNaN(num))
-			{
+			if (isNaN(num)) {
 				// clean number
 				num = num.replace(settings.regex, '');
 				
@@ -127,12 +128,14 @@
 			// set destination
 			$destination[$destination.is('input, select, textarea') ? 'val' : 'html'](money);
 
-			if (hasDecimals && settings.eventOnDecimalsEntered)
+			if (hasDecimals && settings.eventOnDecimalsEntered) {
 				$destination.trigger('decimalsEntered', originalDecimals);
+			}
 
 			// colorize
-			if (settings.colorize)
+			if (settings.colorize) {
 				$destination.css('color', isPositive ? 'black' : 'red');
+			}
 		});
 	};
 
@@ -176,14 +179,17 @@
 		var num = $(this)[method]();
 		num = num ? num : "";
 		num = num.replace(settings.regex, '');
-		if (!settings.parse)
+		if (!settings.parse) {
 			return num;
+		}
 
-		if (num.length == 0)
+		if (num.length == 0) {
 			num = '0';
+		}
 
-		if (settings.decimalSymbol != '.')
+		if (settings.decimalSymbol != '.') {
 			num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arthmetic
+		}
 
 		return window['parse' + settings.parseType](num);
 	};
