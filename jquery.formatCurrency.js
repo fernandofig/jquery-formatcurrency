@@ -77,12 +77,16 @@
 				// clean number
 				num = num.replace(settings.regex, '');
 				
-				if (num === '')
+				if (num === '') {
 					return;
+				}
 				
-				if (settings.decimalSymbol != '.')
+				if (settings.decimalSymbol != '.') {
 					num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arithmetic
-				if (isNaN(num)) num = '0';
+				}
+				if (isNaN(num)) {
+					num = '0';
+				}
 			}
 			
 			// evalutate number input
