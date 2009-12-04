@@ -188,7 +188,9 @@ $(function() {
 			equals($('.floatToCommaDecimal').html(), '33.195,50', "formatting a float value should succeed"); 
 		});
 		
-		
+		testFormat('.formatCurrencyWithBlankSymbol', { symbol: '' }, function() {		
+			equals($('.formatCurrencyWithBlankSymbol').html(), '1,234.56', "can formatcurrency with a blank symbol"); 
+		});
 		
 	});
 	

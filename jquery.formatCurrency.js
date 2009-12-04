@@ -215,9 +215,13 @@
 	}
 	
 	function generateRegex(settings) {
-		var symbol = settings.symbol.replace('$', '\\$').replace('.', '\\.');
-		
-		return new RegExp(symbol + "|[^\\d" + settings.decimalSymbol + "-]", "g");
+		if (settings.symbol === '') {
+			return new RegExp("[^\\d" + settings.decimalSymbol + "-]", "g");
+		}
+		else {
+			var symbol = settings.symbol.replace('$', '\\$').replace('.', '\\.');		
+			return new RegExp(symbol + "|[^\\d" + settings.decimalSymbol + "-]", "g");
+		}	
 	}
 
 })(jQuery);

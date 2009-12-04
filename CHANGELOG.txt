@@ -14,3 +14,6 @@ Changes in v1.2
 - Fixed bug #12 and added unit test (negativeFormatDecimal) to support
 - Fixed bug #13 and added a check for a float value
 - Fixed bug #14 and added unit tests for en-IN which contains edge cases due to its Rs. symbol (Rs. 1,000.00)
+
+Changes in v1.3
+- Fixed bug #15 and added unit test, changed generateRegex function to check for blank symbol.
