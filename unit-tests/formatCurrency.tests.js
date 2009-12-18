@@ -191,7 +191,6 @@ $(function() {
 		testFormat('.formatCurrencyWithBlankSymbol', { symbol: '' }, function() {		
 			equals($('.formatCurrencyWithBlankSymbol').html(), '1,234.56', "can formatcurrency with a blank symbol"); 
 		});
-		
 	});
 	
 	test("can format US currency", function() {
@@ -395,6 +394,10 @@ $(function() {
 		$('.toUSchars-end').toNumber();
 		equals($('.toUSchars-end').html(), '100', 'US with chars at end'); 
 		
+		$('.toNumberFromNegative').toNumber();
+		equals($('.toNumberFromNegative').html(), '-100', 'ToNumber from Negative'); 
+		
+		
 		try
 		{
 			$([]).toNumber();
@@ -466,6 +469,15 @@ $(function() {
 		
 		val = $('.asUSchars-end').asNumber();
 		equals(val, 100, 'US with chars at end'); 
+		
+		val = $('.asNumberFromNegative').asNumber();
+		equals(val, -100, 'AsNumber from Negative'); 
+		
+		val = $('.asNumberFromNegative2').asNumber();
+		equals(val, -100, 'AsNumber from Negative2'); 
+		
+		val = $('.asNumberFromFormatted').formatCurrency().asNumber();
+		equals(val, -100, 'AsNumber from Negative formatted'); 
 		
 		try
 		{
