@@ -68,7 +68,7 @@
 				num = '-' + num;
 			}
 
-			if (num === '') {
+			if (num === '' || num === '-') {
 				return;
 			}
 
@@ -77,7 +77,7 @@
 				// clean number
 				num = num.replace(settings.regex, '');
 				
-				if (num === '') {
+				if (num === '' || num === '-') {
 					return;
 				}
 				
@@ -133,7 +133,11 @@
 			// set destination
 			$destination[$destination.is('input, select, textarea') ? 'val' : 'html'](money);
 
-			if (hasDecimals && settings.eventOnDecimalsEntered) {
+			if (
+				hasDecimals && 
+				settings.eventOnDecimalsEntered && 
+				originalDecimals.length > settings.roundToDecimalPlace
+			) {
 				$destination.trigger('decimalsEntered', originalDecimals);
 			}
 

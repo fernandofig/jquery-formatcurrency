@@ -106,6 +106,22 @@ $(function() {
 			equals($('.warnOnDecimalsEnteredNotification').html(), 'Please do not enter any cents!', "Warn on decimals entered notification");
 		});
 
+		$('.warnOnDecimalsEnteredBeforeRounded').bind('decimalsEntered', function(e, cents, roundedTo) {
+			$('.warnOnDecimalsEnteredBeforeRoundedNotification').html('Please do not enter any cents!' + ' (0.' + cents + ')');
+		});
+		testFormat('.warnOnDecimalsEnteredBeforeRounded', { roundToDecimalPlace: 2, eventOnDecimalsEntered: true }, function() {
+			equals(this.html(), '$123.46', "Warn on decimals entered before they are rounded");
+			equals($('.warnOnDecimalsEnteredBeforeRoundedNotification').html(), 'Please do not enter any cents! (0.456)', "Warn on decimals entered before they are rounded notification");
+		});
+
+		$('.onlyWarnOnDecimalsEnteredAsAppropriate').bind('decimalsEntered', function(e, cents, roundedTo) {
+			$('.onlyWarnOnDecimalsEnteredAsAppropriateNotification').html('Please do not enter any cents!' + ' (0.' + cents + ')');
+		});
+		testFormat('.onlyWarnOnDecimalsEnteredAsAppropriate', { roundToDecimalPlace: 2, eventOnDecimalsEntered: true }, function() {
+			equals(this.html(), '$123.45', "Only warn on decimals entered as appropriate, not here");
+			equals($('.onlyWarnOnDecimalsEnteredAsAppropriateNotification').html(), '', "Only warn on decimals entered as appropriate notification, not here");
+		});
+
 		testFormat('.roundOneUp', {}, function() {
 			equals(this.html(), '$124.00', "roundOneUp");
 		});
@@ -130,6 +146,21 @@ $(function() {
 			equals(this.html(), 'neg $ - 0.25', "negativeFormat Decimal: 'neg %s - %n'"); 
 		});
 		
+		testFormat('.defaultValue', { }, function() {
+			equals(this.html(), '', "Default value");
+		});
+
+		testFormat('.noDefaultValue', { roundToDecimalPlace: -1 }, function() {
+			equals(this.html(), '', "No default value");
+		});
+
+		testFormat('.lonelyNegative', { roundToDecimalPlace: -1, negativeFormat: '-%s%n' }, function() {
+			equals(this.html(), '-', "Keep negative sign without a number");
+		});
+
+		testFormat('.doNoRemoveZero', { roundToDecimalPlace: -1 }, function() {
+			equals(this.html(), '$0', "Do no remove 0");
+		});
 		testFormat('.issue2_doNotRound', {}, function() {
 			equals(this.html(), '$9.45', "issue2_doNotRound (9.45)"); 
 		});

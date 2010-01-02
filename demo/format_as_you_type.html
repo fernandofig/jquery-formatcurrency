@@ -66,11 +66,9 @@
 				$(this).formatCurrency({ roundToDecimalPlace: 2, eventOnDecimalsEntered: true });
 			})
 			.bind('decimalsEntered', function(e, cents) {
-				if (String(cents).length > 2) {
-					var errorMsg = 'Please do not enter any cents (0.' + cents + ')';
-					$('#warnOnDecimalsEnteredNotification2').html(errorMsg);
-					log('Event on decimals entered: ' + errorMsg);
-				}
+				var errorMsg = 'Please do not enter any cents (0.' + cents + ')';
+				$('#warnOnDecimalsEnteredNotification2').html(errorMsg);
+				log('Event on decimals entered: ' + errorMsg);
 			});
 
 
