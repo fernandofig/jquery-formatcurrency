@@ -160,7 +160,7 @@
 
 		return this.each(function() {
 			var method = $(this).is('input, select, textarea') ? 'val' : 'html';
-			$(this)[method]($(this)[method]().replace(settings.regex, ''));
+			$(this)[method]($(this)[method]().replace('(', '(-').replace(settings.regex, ''));
 		});
 	};
 
@@ -183,6 +183,7 @@
 		var method = $(this).is('input, select, textarea') ? 'val' : 'html';
 		var num = $(this)[method]();
 		num = num ? num : "";
+		num = num.replace('(', '(-');
 		num = num.replace(settings.regex, '');
 		if (!settings.parse) {
 			return num;
