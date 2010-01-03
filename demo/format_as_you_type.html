@@ -39,7 +39,10 @@
 				var keyUnicode = e.charCode || e.keyCode;
 				if (e !== undefined) {
 					switch (keyUnicode) {
-						case 27: this.value = ''; break; // Esc
+						case 16: break; // Shift
+						case 27: this.value = ''; break; // Esc: clear entry
+						case 35: break; // End
+						case 36: break; // Home
 						case 37: break; // cursor left
 						case 38: break; // cursor up
 						case 39: break; // cursor right
@@ -82,7 +85,10 @@
 				var keyUnicode = e.charCode || e.keyCode;
 				if (e !== undefined) {
 					switch (keyUnicode) {
-						case 27: this.value = ''; break; // Esc
+						case 16: break; // Shift
+						case 27: this.value = ''; break; // Esc: clear entry
+						case 35: break; // End
+						case 36: break; // Home
 						case 37: break; // cursor left
 						case 38: break; // cursor up
 						case 39: break; // cursor right
