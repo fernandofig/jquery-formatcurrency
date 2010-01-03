@@ -155,7 +155,7 @@ $(function() {
 		});
 
 		testFormat('.lonelyNegative', { roundToDecimalPlace: -1, negativeFormat: '-%s%n' }, function() {
-			equals(this.html(), '-', "Keep negative sign without a number");
+			equals(this.html(), '-', "Keep negative sign without a number during format as you type");
 		});
 
 		testFormat('.doNoRemoveZero', { roundToDecimalPlace: -1 }, function() {

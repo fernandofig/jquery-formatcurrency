@@ -68,7 +68,7 @@
 				num = '-' + num;
 			}
 
-			if (num === '' || num === '-') {
+			if (num === '' || (num === '-' && settings.roundToDecimalPlace === -1)) {
 				return;
 			}
 
@@ -77,7 +77,7 @@
 				// clean number
 				num = num.replace(settings.regex, '');
 				
-				if (num === '' || num === '-') {
+				if (num === '' || (num === '-' && settings.roundToDecimalPlace === -1)) {
 					return;
 				}
 				
