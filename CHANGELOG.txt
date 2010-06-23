@@ -24,3 +24,5 @@ Changes in v1.4
 - Fixed bug where "-" was deleted during Format As You Type. 
 - Improved eventOnDecimalsEntered to only be triggered if necessary.
 - Improve Format As You Type demo by not calling formatCurrency on a SHIFT, HOME or END key
+- Added support for jQuery 1.4 and qUnit 1.4
+- Added fix and test for issue #19 "-.01" was formatting as "-$NaN.01"

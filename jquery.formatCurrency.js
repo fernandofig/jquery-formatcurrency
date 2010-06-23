@@ -98,6 +98,7 @@
 			
 			// format number
 			num = Math.abs(numParts[0]);
+			num = isNaN(num) ? 0 : num;
 			if (settings.roundToDecimalPlace >= 0) {
 				decimals = parseFloat('1.' + decimals); // prepend "0."; (IE does NOT round 0.50.toFixed(0) up, but (1+0.50).toFixed(0)-1
 				decimals = decimals.toFixed(settings.roundToDecimalPlace); // round

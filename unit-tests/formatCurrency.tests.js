@@ -222,6 +222,10 @@ $(function() {
 		testFormat('.formatCurrencyWithBlankSymbol', { symbol: '' }, function() {		
 			equals($('.formatCurrencyWithBlankSymbol').html(), '1,234.56', "can formatcurrency with a blank symbol"); 
 		});
+		
+		testFormat('.formatCurrencyWithNegOneHundredth', { symbol: '$', negativeFormat: '-%s%n' }, function() {		
+			equals($('.formatCurrencyWithNegOneHundredth').html(), '-$0.01', "can formatcurrency with a -0.01 (issue #19)"); 
+		});
 	});
 	
 	test("can format US currency", function() {
