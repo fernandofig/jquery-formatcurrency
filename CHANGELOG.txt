@@ -1,11 +1,17 @@
-Changes in v1.1
-- Sending a bad element to asNumber causes null exception (unit test added 11.10)
-- Added a dropDecimals setting and accompanying unit-tests.
-- Added roundToDecimalPlace and alertOnDecimal settings and accompanying unit tests. (from Emmanuel Sambo)
-- Fix rounding error in Internet Explorer
-- Remove dropDecimals in favor for roundToDecimalPlace
-- Use custom event to warn about decimals entered, if enabled
-- fixed but where only the first selector match was being set (unit test added 37) (issue #7)
+Changes in v1.5
+- Added fix and test for issue #20 "asdfsafasdf" was not formatting.   Blank still doesn't format.
+
+Changes in v1.4
+- Fixed bug where "-" was deleted during Format As You Type. 
+- Improved eventOnDecimalsEntered to only be triggered if necessary.
+- Improve Format As You Type demo by not calling formatCurrency on a SHIFT, HOME or END key
+- Added support for jQuery 1.4 and qUnit 1.4
+- Added fix and test for issue #19 "-.01" was formatting as "-$NaN.01"
+
+Changes in v1.3
+- Fixed bug #15 and added unit test, changed generateRegex function to check for blank symbol.
+- Added explicit open/closing {} on all if statements
+- Fixed bug #16 and added unit tests for negative format of (100.00)
 
 Changes in v1.2
 - Stored originalDecimals for reporting on the decimalsEntered trigger
@@ -15,17 +21,11 @@ Changes in v1.2
 - Fixed bug #13 and added a check for a float value
 - Fixed bug #14 and added unit tests for en-IN which contains edge cases due to its Rs. symbol (Rs. 1,000.00)
 
-Changes in v1.3
-- Fixed bug #15 and added unit test, changed generateRegex function to check for blank symbol.
-- Added explicit open/closing {} on all if statements
-- Fixed bug #16 and added unit tests for negative format of (100.00)
-
-Changes in v1.4
-- Fixed bug where "-" was deleted during Format As You Type. 
-- Improved eventOnDecimalsEntered to only be triggered if necessary.
-- Improve Format As You Type demo by not calling formatCurrency on a SHIFT, HOME or END key
-- Added support for jQuery 1.4 and qUnit 1.4
-- Added fix and test for issue #19 "-.01" was formatting as "-$NaN.01"
-
-Changes in v1.5
-- Added fix and test for issue #20 "asdfsafasdf" was not formatting.   Blank still doesn't format.
+Changes in v1.1
+- Sending a bad element to asNumber causes null exception (unit test added 11.10)
+- Added a dropDecimals setting and accompanying unit-tests.
+- Added roundToDecimalPlace and alertOnDecimal settings and accompanying unit tests. (from Emmanuel Sambo)
+- Fix rounding error in Internet Explorer
+- Remove dropDecimals in favor for roundToDecimalPlace
+- Use custom event to warn about decimals entered, if enabled
+- fixed but where only the first selector match was being set (unit test added 37) (issue #7)
