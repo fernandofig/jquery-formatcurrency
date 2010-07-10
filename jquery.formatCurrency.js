@@ -78,7 +78,7 @@
 				num = num.replace(settings.regex, '');
 				
 				if (num === '' || (num === '-' && settings.roundToDecimalPlace === -1)) {
-					return;
+					num = '0';
 				}
 				
 				if (settings.decimalSymbol != '.') {

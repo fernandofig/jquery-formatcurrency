@@ -26,3 +26,6 @@ Changes in v1.4
 - Improve Format As You Type demo by not calling formatCurrency on a SHIFT, HOME or END key
 - Added support for jQuery 1.4 and qUnit 1.4
 - Added fix and test for issue #19 "-.01" was formatting as "-$NaN.01"
+
+Changes in v1.5
+- Added fix and test for issue #20 "asdfsafasdf" was not formatting.   Blank still doesn't format.

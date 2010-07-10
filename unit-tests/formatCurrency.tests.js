@@ -226,6 +226,10 @@ $(function() {
 		testFormat('.formatCurrencyWithNegOneHundredth', { symbol: '$', negativeFormat: '-%s%n' }, function() {		
 			equals($('.formatCurrencyWithNegOneHundredth').html(), '-$0.01', "can formatcurrency with a -0.01 (issue #19)"); 
 		});
+		
+		testFormat('.formatCurrencyWithAlpha', { symbol: '$', negativeFormat: '-%s%n' }, function() {		
+			equals($('.formatCurrencyWithAlpha').html(), '$0.00', "can formatcurrency with alphabetical characters only (issue #20)"); 
+		});
 	});
 	
 	test("can format US currency", function() {
@@ -529,7 +533,6 @@ $(function() {
 			$('.asUSbad-element').html('fail-' + e);
 		}
 		equals($('.asUSbad-element').html(), 'pass', 'bad selector element still works'); 
-		
 	}); 
 	
 	test("can get DE asNumber", function() { 
