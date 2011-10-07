@@ -188,11 +188,11 @@ $(function() {
 		equals($('.dest2').html(), '$1,000.00', 'Set using src,dest with different types'); 
 		
 		testFormat('.colorize', { colorize:true}, function() {		
-			equals(this.css('color'), 'black', "colorize: true"); 
+			equals(this.css('color'), 'rgb(0, 0, 0)', "colorize: true"); 
 		});
 		
 		testFormat('.colorize-neg', { colorize:true}, function() {		
-			equals(this.css('color'), 'red', "colorize: true (with negative should be red)"); 
+			equals(this.css('color'), 'rgb(255, 0, 0)', "colorize: true (with negative should be red)"); 
 		});
 		
 		testFormat('.region', { region:'de'}, function() {		
