@@ -89,9 +89,14 @@
 				}
 			}
 			
+			var isPositive = (num == Math.abs(num));
+			if (!isPositive && settings.disableNegative === true) {
+				num = 0; 
+				isPositive = true;
+			}
+			
 			// evalutate number input
 			var numParts = String(num).split('.');
-			var isPositive = (num == Math.abs(num));
 			var hasDecimals = (numParts.length > 1);
 			var decimals = (hasDecimals ? numParts[1].toString() : '0');
 			var originalDecimals = decimals;

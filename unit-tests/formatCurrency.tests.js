@@ -194,6 +194,10 @@ $(function() {
 		testFormat('.colorize-neg', { colorize:true}, function() {		
 			equals(this.css('color'), 'rgb(255, 0, 0)', "colorize: true (with negative should be red)"); 
 		});
+	
+		testFormat('.disableNegative', { disableNegative:true }, function() {		
+			equals(this.html(), '$0.00', "disableNegative: true (with negative should be zero)"); 
+		});
 		
 		testFormat('.region', { region:'de'}, function() {		
 			equals(this.html(), '1.000,00 €', "region: 'de'"); 
