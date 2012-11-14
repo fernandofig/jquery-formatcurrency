@@ -17,6 +17,26 @@
 
 	$.formatCurrency = {};
 
+	$.formatCurrency.defaults = {
+		colorize: false,
+		region: '',
+		global: true,
+		roundToDecimalPlace: 2, // roundToDecimalPlace: -1; for no rounding; 0 to round to the dollar; 1 for one digit cents; 2 for two digit cents; 3 for three digit cents; ...
+		eventOnDecimalsEntered: false
+	};
+
+	$.toNumber.defaults = {
+		region: '',
+		global: true
+	};
+
+	$.asNumber.defaults = {
+		region: '',
+		parse: true,
+		parseType: 'Float',
+		global: true
+	};	
+
 	$.formatCurrency.regions = [];
 
 	// default Region is en
@@ -36,25 +56,7 @@
 			destination = false;
 		}
 
-		// initialize defaults
-		var defaults = {
-			name: "formatCurrency",
-			colorize: false,
-			region: '',
-			global: true,
-			roundToDecimalPlace: 2, // roundToDecimalPlace: -1; for no rounding; 0 to round to the dollar; 1 for one digit cents; 2 for two digit cents; 3 for three digit cents; ...
-			eventOnDecimalsEntered: false
-		};
-		// initialize default region
-		defaults = $.extend(defaults, $.formatCurrency.regions['']);
-		// override defaults with settings passed in
-		settings = $.extend(defaults, settings);
-
-		// check for region setting
-		if (settings.region.length > 0) {
-			settings = $.extend(settings, getRegionOrCulture(settings.region));
-		}
-		settings.regex = generateRegex(settings);
+		settings = buildSettingsObjGraph(settings, $.formatCurrency.defaults);
 
 		return this.each(function() {
 			$this = $(this);
@@ -156,17 +158,7 @@
 
 	// Remove all non numbers from text
 	$.fn.toNumber = function(settings) {
-		var defaults = $.extend({
-			name: "toNumber",
-			region: '',
-			global: true
-		}, $.formatCurrency.regions['']);
-
-		settings = jQuery.extend(defaults, settings);
-		if (settings.region.length > 0) {
-			settings = $.extend(settings, getRegionOrCulture(settings.region));
-		}
-		settings.regex = generateRegex(settings);
+		settings = buildSettingsObjGraph(settings, $.toNumber.defaults);
 
 		return this.each(function() {
 			var method = $(this).is('input, select, textarea') ? 'val' : 'html';
@@ -176,19 +168,7 @@
 
 	// returns the value from the first element as a number
 	$.fn.asNumber = function(settings) {
-		var defaults = $.extend({
-			name: "asNumber",
-			region: '',
-			parse: true,
-			parseType: 'Float',
-			global: true
-		}, $.formatCurrency.regions['']);
-		settings = jQuery.extend(defaults, settings);
-		if (settings.region.length > 0) {
-			settings = $.extend(settings, getRegionOrCulture(settings.region));
-		}
-		settings.regex = generateRegex(settings);
-		settings.parseType = validateParseType(settings.parseType);
+		settings = buildSettingsObjGraph(settings, $.asNumber.defaults);
 
 		var method = $(this).is('input, select, textarea') ? 'val' : 'html';
 		var num = $(this)[method]();
@@ -209,6 +189,25 @@
 
 		return window['parse' + settings.parseType](num);
 	};
+
+	function buildSettingsObjGraph(settings, defaults) {
+		// build settings graph starting from the defaults and merging region settings if needed
+		settings = $.extend(
+			{ },
+			defaults,
+			$.formatCurrency.regions[''],
+			settings,
+			(settings.region !== '' ? getRegionOrCulture(settings.region) : { })
+		);
+
+		// validate parseType if it exists (for the 'asNumber' object graph)
+		if (settings.hasOwnProperty('parseType'))
+			settings.parseType = validateParseType(settings.parseType);
+
+		settings.regex = generateRegex(settings);
+
+		return settings;
+	}
 
 	function getRegionOrCulture(region) {
 		var regionInfo = $.formatCurrency.regions[region];
