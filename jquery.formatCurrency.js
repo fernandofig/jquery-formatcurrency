@@ -16,13 +16,24 @@
 (function($) {
 
 	$.formatCurrency = {};
+	$.formatCurrencyLive = {};
+	$.toNumber = {};
+	$.asNumber = {};
+
+	$.formatCurrencyLive.defaults = {
+		decPointCharCodes : [ ], // by index: 0 - key code for key press event; 1 & 2 key codes for keyup event for the decimal point keys on the keyboard and keypad, respectively
+		formatOnBlur : false,
+		filterKeys : false,
+		formatOnType : true
+	};
 
 	$.formatCurrency.defaults = {
 		colorize: false,
 		region: '',
 		global: true,
 		roundToDecimalPlace: 2, // roundToDecimalPlace: -1; for no rounding; 0 to round to the dollar; 1 for one digit cents; 2 for two digit cents; 3 for three digit cents; ...
-		eventOnDecimalsEntered: false
+		eventOnDecimalsEntered: false,
+		suppressCurrencySymbol: true
 	};
 
 	$.toNumber.defaults = {
@@ -35,7 +46,7 @@
 		parse: true,
 		parseType: 'Float',
 		global: true
-	};	
+	};
 
 	$.formatCurrency.regions = [];
 
@@ -49,6 +60,49 @@
 		groupDigits: true
 	};
 
+	$.fn.formatCurrencyLive = function(settings) {
+		return this.each(function() {
+			$this = $(this);
+
+			settings = buildSettingsObjGraph(
+				settings,
+				$.extend(
+					{},
+					$.formatCurrencyLive.defaults,
+					$.formatCurrency.defaults,
+					($this.data('formatCurrency') ? $this.data('formatCurrency') : { })
+				)
+			);
+
+			// setup the decimal point charCode setting according to the region
+			if(settings.decimalSymbol == ',')
+				settings.decPointCharCodes = [ 44, 188, 110 ];
+			else
+				settings.decPointCharCodes = [ 46, 190, 110 ];
+
+			$this.data('formatCurrency', settings);
+
+			if(settings.filterKeys)
+				$this.off('keypress.formatCurrency')
+					.on('keypress.formatCurrency', function(ev) {
+						if (!keyFilter(ev, settings.decPointCharCodes)) ev.preventDefault();
+					})
+
+			if(settings.formatOnType) {
+				var settingsFmtOnType = $.extend({}, settings, { roundToDecimalPlace: -1 });
+				$this.off('keyup.formatCurrency')
+					.on('keyup.formatCurrency', function(ev) {
+						if(keyFilter(ev, settings.decPointCharCodes)) $(this).formatCurrency(settingsFmtOnType);
+					});
+			}
+
+			if(settings.formatOnBlur)
+				$this.on('blur.formatCurrency', function(ev) {
+					$(this).formatCurrency(settings);
+				});
+		});
+	};	
+
 	$.fn.formatCurrency = function(destination, settings) {
 
 		if (arguments.length == 1 && typeof destination !== "string") {
@@ -56,7 +110,12 @@
 			destination = false;
 		}
 
-		settings = buildSettingsObjGraph(settings, $.formatCurrency.defaults);
+		// if this element has settings associated with it by the live Formatter and no settings
+		// was specified, use the stored settings. Else, build the settings object as normal
+		settings = ($(this).data('formatCurrency') && !settings ? 
+						$(this).data('formatCurrency') : 
+						buildSettingsObjGraph(settings, $.formatCurrency.defaults)
+					);
 
 		return this.each(function() {
 			$this = $(this);
@@ -66,31 +125,28 @@
 			num = $this[$this.is('input, select, textarea') ? 'val' : 'html']();
 
 			//identify '(123)' as a negative number
-			if (num.search('\\(') >= 0) {
+			if (num.search('\\(') >= 0)
 				num = '-' + num;
-			}
 
-			if (num === '' || (num === '-' && settings.roundToDecimalPlace === -1)) {
-				return;
-			}
+			if (num === '' || (num === '-' && settings.roundToDecimalPlace === -1)) return;
+
+			num = num.replace(settings.regexGroupDigit, ''); // Remove group digit for arithmetic
+
+			if (settings.decimalSymbol != '.')
+				num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arithmetic				
 
 			// if the number is valid use it, otherwise clean it
 			if (isNaN(num)) {
 				// clean number
 				num = num.replace(settings.regex, '');
 				
-				if (num === '' || (num === '-' && settings.roundToDecimalPlace === -1)) {
+				if (num === '' || (num === '-' && settings.roundToDecimalPlace === -1))
 					num = '0';
-				}
 				
-				if (settings.decimalSymbol != '.') {
-					num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arithmetic
-				}
-				if (isNaN(num)) {
+				if (isNaN(num))
 					num = '0';
-				}
 			}
-			
+
 			var isPositive = (num == Math.abs(num));
 			if (!isPositive && settings.disableNegative === true) {
 				num = 0; 
@@ -128,7 +184,8 @@
 
 			// format symbol/negative
 			var format = isPositive ? settings.positiveFormat : settings.negativeFormat;
-			var money = format.replace(/%s/g, settings.symbol);
+			var money = format;
+			if(settings.symbol !== '') money = money.replace(/%s/g, settings.symbol);
 			money = money.replace(/%n/g, num);
 
 			// setup destination
@@ -141,11 +198,9 @@
 			// set destination
 			$destination[$destination.is('input, select, textarea') ? 'val' : 'html'](money);
 
-			if (
-				hasDecimals && 
+			if (hasDecimals && 
 				settings.eventOnDecimalsEntered && 
-				originalDecimals.length > settings.roundToDecimalPlace
-			) {
+				originalDecimals.length > settings.roundToDecimalPlace) {
 				$destination.trigger('decimalsEntered', originalDecimals);
 			}
 
@@ -158,7 +213,7 @@
 
 	// Remove all non numbers from text
 	$.fn.toNumber = function(settings) {
-		settings = buildSettingsObjGraph(settings, $.toNumber.defaults);
+		settings = buildSettingsObjGraph((settings || { }), $.toNumber.defaults);
 
 		return this.each(function() {
 			var method = $(this).is('input, select, textarea') ? 'val' : 'html';
@@ -168,7 +223,7 @@
 
 	// returns the value from the first element as a number
 	$.fn.asNumber = function(settings) {
-		settings = buildSettingsObjGraph(settings, $.asNumber.defaults);
+		settings = buildSettingsObjGraph((settings || { }), $.asNumber.defaults);
 
 		var method = $(this).is('input, select, textarea') ? 'val' : 'html';
 		var num = $(this)[method]();
@@ -184,13 +239,18 @@
 		}
 
 		if (settings.decimalSymbol != '.') {
-			num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arthmetic
+			num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arithmetic
 		}
 
 		return window['parse' + settings.parseType](num);
 	};
 
 	function buildSettingsObjGraph(settings, defaults) {
+		if(!settings) {
+			settings = {};
+			settings.region = '';
+		}
+
 		// build settings graph starting from the defaults and merging region settings if needed
 		settings = $.extend(
 			{ },
@@ -200,13 +260,55 @@
 			(settings.region !== '' ? getRegionOrCulture(settings.region) : { })
 		);
 
-		// validate parseType if it exists (for the 'asNumber' object graph)
+		if (settings.suppressCurrencySymbol) {
+			settings.symbol = '';
+			settings.positiveFormat = $.trim(settings.positiveFormat.replace('%s', ''));
+			settings.negativeFormat = $.trim(settings.negativeFormat.replace('%s', '').replace(' %n','%n'));
+		}
+
+		// validate parseType if it exists (for the 'asNumber' settings object graph)
 		if (settings.hasOwnProperty('parseType'))
 			settings.parseType = validateParseType(settings.parseType);
 
-		settings.regex = generateRegex(settings);
+		// Generate regex for formatting
+		if (settings.symbol === '')
+			settings.regex = new RegExp("[^\\d" + settings.decimalSymbol + "-]", "g");
+		else {
+			var symbol = settings.symbol.replace('$', '\\$').replace('.', '\\.');		
+			settings.regex = new RegExp(symbol + "|[^\\d" + settings.decimalSymbol + "-]", "g");
+		}
+
+		settings.regexGroupDigit = new RegExp("\\" + settings.digitGroupSymbol, "g");
 
 		return settings;
+	}
+
+	function keyFilter(ev, decPointCodes) {
+		//console.log(ev.type + ' = ' + ev.which);
+		if(ev.which >= 48 && ev.which <= 57)
+			return true;
+		else if(ev.type == 'keypress' && ev.which == decPointCodes[0])
+			return (ev.target.value.indexOf(String.fromCharCode(decPointCodes[0])) == -1);
+		else if (ev.type == 'keyup') {
+			switch (ev.which) {
+				case 16: break; // Shift
+				case 17: break; // Ctrl
+				case 18: break; // Alt
+				case 35: break; // End
+				case 36: break; // Home
+				case 37: break; // cursor left
+				case 38: break; // cursor up
+				case 39: break; // cursor right
+				case 40: break; // cursor down
+				case 78: break; // N (Opera 9.63+ maps the "." from the number key section to the "N" key too!) (See: http://unixpapa.com/js/key.html search for ". Del")
+				case decPointCodes[2]: break; // . number block (Opera 9.63+ maps the "." from the number block to the "N" key (78) !!!)
+				case decPointCodes[1]: break; // .
+				default: return true;
+			}
+
+			return false;
+		} else
+			return false;
 	}
 
 	function getRegionOrCulture(region) {
@@ -233,16 +335,6 @@
 			default:
 				throw 'invalid parseType';
 		}
-	}
-	
-	function generateRegex(settings) {
-		if (settings.symbol === '') {
-			return new RegExp("[^\\d" + settings.decimalSymbol + "-]", "g");
-		}
-		else {
-			var symbol = settings.symbol.replace('$', '\\$').replace('.', '\\.');		
-			return new RegExp(symbol + "|[^\\d" + settings.decimalSymbol + "-]", "g");
-		}	
 	}
 
 })(jQuery);
