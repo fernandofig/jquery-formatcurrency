@@ -29,22 +29,20 @@
 	var fcDefaults = {
 		colorize: false,
 		region: '',
-		global: true,
 		roundToDecimalPlace: 2, // roundToDecimalPlace: -1; for no rounding; 0 to round to the dollar; 1 for one digit cents; 2 for two digit cents; 3 for three digit cents; ...
 		eventOnDecimalsEntered: false,
-		suppressCurrencySymbol: false
+		suppressCurrencySymbol: false,
+		removeTrailingZerosOnDecimal: false
 	};
 
 	var tnDefaults = {
-		region: '',
-		global: true
+		region: ''
 	};
 
 	var anDefaults = {
 		region: '',
 		parse: true,
-		parseType: 'Float',
-		global: true
+		parseType: 'Float'
 	};
 
 	$.formatCurrency.regions = [];
@@ -92,7 +90,7 @@
 					})
 
 			if (settings.formatOnType) {
-				var settingsFmtOnType = $.extend({}, settings, { roundToDecimalPlace: -1 });
+				var settingsFmtOnType = $.extend({}, settings, { roundToDecimalPlace: -1, removeTrailingZerosOnDecimal: false });
 				$this.off('keyup.formatCurrency')
 					.on('keyup.formatCurrency', function (ev) {
 						if (keyAllowed(ev, settings.decPointCharCodes)) $(this).formatCurrency(settingsFmtOnType);
@@ -129,8 +127,8 @@
 		// if this element has settings associated with it by the live Formatter and no settings
 		// was specified, use the stored settings. Else, build the settings object as normal
 		settings = ($(this).data('formatCurrency') && !settings ?
-						$(this).data('formatCurrency') :
-						buildSettingsObjGraph(settings, fcDefaults)
+						$(this).data('formatCurrency') : 
+						settings
 					);
 
 		return this.each(function () {
@@ -140,69 +138,9 @@
 			var num = '0';
 			num = $this[$this.is('input, select, textarea') ? 'val' : 'html']();
 
-			//identify '(123)' as a negative number
-			if (num.search('\\(') >= 0)
-				num = '-' + num;
+			var money = $.getFormattedCurrency(num, settings, true);
 
-			if (num === '' || (num === '-' && settings.roundToDecimalPlace === -1)) return;
-
-			num = num.replace(settings.regexGroupDigit, ''); // Remove group digit for arithmetic
-
-			if (settings.decimalSymbol != '.')
-				num = num.replace(settings.decimalSymbol, '.');  // reset to US decimal for arithmetic				
-
-			// if the number is valid use it, otherwise clean it
-			if (isNaN(num)) {
-				// clean number
-				num = num.replace(settings.regex, '');
-
-				if (num === '' || (num === '-' && settings.roundToDecimalPlace === -1))
-					num = '0';
-
-				if (isNaN(num))
-					num = '0';
-			}
-
-			var isPositive = (num == Math.abs(num));
-			if (!isPositive && settings.disableNegative === true) {
-				num = 0;
-				isPositive = true;
-			}
-
-			// evalutate number input
-			var numParts = String(num).split('.');
-			var hasDecimals = (numParts.length > 1);
-			var decimals = (hasDecimals ? numParts[1].toString() : '0');
-			var originalDecimals = decimals;
-
-			// format number
-			num = Math.abs(numParts[0]);
-			num = isNaN(num) ? 0 : num;
-			if (settings.roundToDecimalPlace >= 0) {
-				decimals = parseFloat('1.' + decimals); // prepend "0."; (IE does NOT round 0.50.toFixed(0) up, but (1+0.50).toFixed(0)-1
-				decimals = decimals.toFixed(settings.roundToDecimalPlace); // round
-				if (decimals.substring(0, 1) == '2') {
-					num = Number(num) + 1;
-				}
-				decimals = decimals.substring(2); // remove "0."
-			}
-			num = String(num);
-
-			if (settings.groupDigits) {
-				for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) {
-					num = num.substring(0, num.length - (4 * i + 3)) + settings.digitGroupSymbol + num.substring(num.length - (4 * i + 3));
-				}
-			}
-
-			if ((hasDecimals && settings.roundToDecimalPlace == -1) || settings.roundToDecimalPlace > 0) {
-				num += settings.decimalSymbol + decimals;
-			}
-
-			// format symbol/negative
-			var format = isPositive ? settings.positiveFormat : settings.negativeFormat;
-			var money = format;
-			if (settings.symbol !== '') money = money.replace(/%s/g, settings.symbol);
-			money = money.replace(/%n/g, num);
+			if(!money) return;
 
 			// setup destination
 			var $destination = $([]);
@@ -212,19 +150,92 @@
 				$destination = $(destination);
 			}
 			// set destination
-			$destination[$destination.is('input, select, textarea') ? 'val' : 'html'](money);
+			$destination[$destination.is('input, select, textarea') ? 'val' : 'html'](money[0]);
 
-			if (hasDecimals &&
+			if (money[1] &&
 				settings.eventOnDecimalsEntered &&
-				originalDecimals.length > settings.roundToDecimalPlace) {
-				$destination.trigger('decimalsEntered', originalDecimals);
+				money[2].length > settings.roundToDecimalPlace) {
+				$destination.trigger('decimalsEntered', money[2]);
 			}
 
 			// colorize
-			if (settings.colorize) {
-				$destination.css('color', isPositive ? 'black' : 'red');
-			}
+			if (settings.colorize) $destination.css('color', money[3] ? 'black' : 'red');
 		});
+	};
+
+	$.getFormattedCurrency = function (expr, settings, returnMetadata) {
+		// if this element has settings associated with it by the live Formatter and no settings
+		// was specified, use the stored settings. Else, build the settings object as normal
+		settings = buildSettingsObjGraph(settings, fcDefaults);
+
+		expr = (typeof(expr) !== "string" ? expr.toString().replace('\.', settings.decimalSymbol) : expr);
+
+		//identify '(123)' as a negative number
+		if (expr.search('\\(') >= 0)
+			expr = '-' + expr;
+
+		if (expr === '' || (expr === '-' && settings.roundToDecimalPlace === -1)) return;
+
+		expr = expr.replace(settings.regexGroupDigit, ''); // Remove group digit for arithmetic
+
+		if (settings.decimalSymbol != '.')
+			expr = expr.replace(settings.decimalSymbol, '.');  // reset to US decimal for arithmetic				
+
+		// if the number is valid use it, otherwise clean it
+		if (isNaN(expr)) {
+			// clean number
+			expr = expr.replace(settings.regex, '');
+
+			if (expr === '' || (expr === '-' && settings.roundToDecimalPlace === -1))
+				expr = '0';
+
+			if (isNaN(expr))
+				expr = '0';
+		}
+
+		var isPositive = (expr == Math.abs(expr));
+		if (!isPositive && settings.disableNegative === true) {
+			expr = 0;
+			isPositive = true;
+		}
+
+		// evalutate number input
+		var numParts = String(expr).split('.');
+		var hasDecimals = (numParts.length > 1);
+		var decimals = (hasDecimals ? numParts[1].toString() : '0');
+		var originalDecimals = decimals;
+
+		// format number
+		expr = Math.abs(numParts[0]);
+		expr = isNaN(expr) ? 0 : expr;
+		if (settings.roundToDecimalPlace >= 0) {
+			decimals = parseFloat('1.' + decimals); // prepend "0."; (IE does NOT round 0.50.toFixed(0) up, but (1+0.50).toFixed(0)-1
+			decimals = decimals.toFixed(settings.roundToDecimalPlace); // round
+			if (decimals.substring(0, 1) == '2') {
+				expr = Number(expr) + 1;
+			}
+			decimals = decimals.substring(2); // remove "0."
+		}
+		expr = String(expr);
+
+		if (settings.groupDigits) {
+			for (var i = 0; i < Math.floor((expr.length - (1 + i)) / 3); i++) {
+				expr = expr.substring(0, expr.length - (4 * i + 3)) + settings.digitGroupSymbol + expr.substring(expr.length - (4 * i + 3));
+			}
+		}
+
+		if ((hasDecimals && settings.roundToDecimalPlace == -1) || settings.roundToDecimalPlace > 0) {
+			if (settings.removeTrailingZerosOnDecimal) decimals = decimals.replace(/0+$/, '');
+			expr += (decimals.length > 0 ? settings.decimalSymbol + decimals : "");
+		}
+
+		// format symbol/negative
+		var format = isPositive ? settings.positiveFormat : settings.negativeFormat;
+		var money = format;
+		if (settings.symbol !== '') money = money.replace(/%s/g, settings.symbol);
+		money = money.replace(/%n/g, expr);
+
+		return (returnMetadata ? [ money, hasDecimals, originalDecimals, isPositive ] : money);
 	};
 
 	// Remove all non numbers from text	
