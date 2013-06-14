@@ -19,13 +19,6 @@
 	$.toNumber = {};
 	$.asNumber = {};
 
-	var fclDefaults = {
-		decPointCharCodes: [], // by index: 0 - key code for key press event; 1 & 2 key codes for keyup event for the decimal point keys on the keyboard and keypad, respectively
-		formatOnBlur: true,
-		filterKeys: true,
-		formatOnType: true
-	};
-
 	var fcDefaults = {
 		colorize: false,
 		region: '',
@@ -34,12 +27,19 @@
 		suppressCurrencySymbol: false,
 		removeTrailingZerosOnDecimal: false
 	};
+	
+	var fcLiveDefaults = {
+		decPointCharCodes: [], // by index: 0 - key code for key press event; 1 & 2 key codes for keyup event for the decimal point keys on the keyboard and keypad, respectively
+		formatOnBlur: true,
+		filterKeys: true,
+		formatOnType: true
+	};
 
-	var tnDefaults = {
+	var toNumberDefaults = {
 		region: ''
 	};
 
-	var anDefaults = {
+	var asNumberDefaults = {
 		region: '',
 		parse: true,
 		parseType: 'Float'
@@ -58,7 +58,7 @@
 	};
 
 	$.formatCurrencyLive.setDefaults = function(settings) {
-		$.extend(fclDefaults, settings);
+		$.extend(fcLiveDefaults, settings);
 	};
 
 	$.fn.formatCurrencyLive = function (settings) {
@@ -70,7 +70,7 @@
 				$.extend(
 					{},
 					fcDefaults,
-					fclDefaults,
+					fcLiveDefaults,
 					($this.data('formatCurrency') ? $this.data('formatCurrency') : {})
 				)
 			);
@@ -115,9 +115,9 @@
 	$.formatCurrency.setAllDefaults = function(settings) {		
 		for (var prop in settings) {
 			if(fcDefaults.hasOwnProperty(prop)) fcDefaults[prop] = settings[prop];
-			if(fclDefaults.hasOwnProperty(prop)) fclDefaults[prop] = settings[prop];
-			if(tnDefaults.hasOwnProperty(prop)) tnDefaults[prop] = settings[prop];
-			if(anDefaults.hasOwnProperty(prop)) anDefaults[prop] = settings[prop];
+			if(fcLiveDefaults.hasOwnProperty(prop)) fcLiveDefaults[prop] = settings[prop];
+			if(toNumberDefaults.hasOwnProperty(prop)) toNumberDefaults[prop] = settings[prop];
+			if(asNumberDefaults.hasOwnProperty(prop)) asNumberDefaults[prop] = settings[prop];
 		}
 	};
 
@@ -244,7 +244,7 @@
 
 	// Remove all non numbers from text	
 	$.toNumber.setDefaults = function(settings) {
-		$.extend(tnDefaults, settings);
+		$.extend(toNumberDefaults, settings);
 	};
 
 	$.fn.toNumber = function (settings) {
@@ -255,14 +255,14 @@
 	};
 
 	$.toNumber = function(expr, settings) {
-		settings = buildSettingsObjGraph(settings, tnDefaults);
+		settings = buildSettingsObjGraph(settings, toNumberDefaults);
 
 		return expr.replace('(', '(-').replace(settings.regex, '');
 	};
 
 	// returns the value from the first element as a number
 	$.asNumber.setDefaults = function(settings) {
-		$.extend(anDefaults, settings);
+		$.extend(asNumberDefaults, settings);
 	};
 
 	$.fn.asNumber = function (settings) {
@@ -273,7 +273,7 @@
 	};
 
 	$.asNumber = function(expr, settings) {
-		settings = buildSettingsObjGraph(settings, anDefaults);
+		settings = buildSettingsObjGraph(settings, asNumberDefaults);
 
 		expr = expr ? expr : "";
 		expr = expr.replace('(', '(-');
