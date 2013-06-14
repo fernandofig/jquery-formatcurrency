@@ -143,6 +143,7 @@
 			num = $this[$this.is('input, select, textarea') ? 'val' : 'html']();
 
 			var money = $.getFormattedCurrency(num, settings, true);
+			settings = money[4];
 
 			if(!money) return;
 
@@ -168,8 +169,6 @@
 	};
 
 	$.getFormattedCurrency = function (expr, settings, returnMetadata) {
-		// if this element has settings associated with it by the live Formatter and no settings
-		// was specified, use the stored settings. Else, build the settings object as normal
 		settings = buildSettingsObjGraph(settings, fcDefaults);
 
 		expr = (typeof(expr) !== "string" ? expr.toString().replace('\.', settings.decimalSymbol) : expr);
@@ -239,7 +238,7 @@
 		if (settings.symbol !== '') money = money.replace(/%s/g, settings.symbol);
 		money = money.replace(/%n/g, expr);
 
-		return (returnMetadata ? [ money, hasDecimals, originalDecimals, isPositive ] : money);
+		return (returnMetadata ? [ money, hasDecimals, originalDecimals, isPositive, settings ] : money);
 	};
 
 	// Remove all non numbers from text	
