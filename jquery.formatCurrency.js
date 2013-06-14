@@ -29,7 +29,7 @@
 	var fcDefaults = {
 		colorize: false,
 		region: '',
-		roundToDecimalPlace: 2, // roundToDecimalPlace: -1; for no rounding; 0 to round to the dollar; 1 for one digit cents; 2 for two digit cents; 3 for three digit cents; ...
+		roundToDecimalPlace: 2, // roundToDecimalPlace: -2; for not allowing decimals; roundToDecimalPlace: -1; for no rounding; 0 to round to the dollar; 1 for one digit cents; 2 for two digit cents; 3 for three digit cents; ...
 		eventOnDecimalsEntered: false,
 		suppressCurrencySymbol: false,
 		removeTrailingZerosOnDecimal: false
@@ -63,7 +63,7 @@
 
 	$.fn.formatCurrencyLive = function (settings) {
 		return this.each(function () {
-			$this = $(this);
+			var $this = $(this);
 
 			settings = buildSettingsObjGraph(
 				settings,
@@ -76,10 +76,14 @@
 			);
 
 			// setup the decimal point charCode setting according to the region
-			if (settings.decimalSymbol == ',')
-				settings.decPointCharCodes = [44, 188, 110];
-			else
-				settings.decPointCharCodes = [46, 190, 110];
+			if (settings.roundToDecimalPlace === -2)
+				settings.decPointCharCodes = [-1, -1, -1];
+			else {
+				if (settings.decimalSymbol == ',')
+					settings.decPointCharCodes = [44, 188, 110];
+				else
+					settings.decPointCharCodes = [46, 190, 110];
+			}
 
 			$this.data('formatCurrency', settings);
 
@@ -132,7 +136,7 @@
 					);
 
 		return this.each(function () {
-			$this = $(this);
+			var $this = $(this);
 
 			// get number
 			var num = '0';
@@ -201,7 +205,7 @@
 
 		// evalutate number input
 		var numParts = String(expr).split('.');
-		var hasDecimals = (numParts.length > 1);
+		var hasDecimals = (numParts.length > 1 && settings.roundToDecimalPlace > -2);
 		var decimals = (hasDecimals ? numParts[1].toString() : '0');
 		var originalDecimals = decimals;
 
@@ -285,6 +289,7 @@
 
 	function buildSettingsObjGraph(settings, defaults) {
 		if (!settings) settings = {};
+		var bareSettings = settings;
 
 		// build settings graph starting from the defaults and merging region settings if needed
 		settings = $.extend(
@@ -294,7 +299,7 @@
 			settings
 		);
 
-		if (settings.region !== '') $.extend(settings, getRegionOrCulture(settings.region));
+		if (settings.region !== '') $.extend(settings, getRegionOrCulture(settings.region), bareSettings);
 
 		if (settings.suppressCurrencySymbol) {
 			settings.symbol = '';
@@ -325,15 +330,17 @@
 		else if (ev.type == 'keypress' && ev.which == decPointCodes[0])
 			return (ev.target.value.indexOf(String.fromCharCode(decPointCodes[0])) == -1);
 		else if (ev.type == 'keypress') {
-			return (ev.which < 32 || (ev.which >= 33 && ev.which <= 40) || ev.which == 46);
+			return (ev.which < 32 || (ev.which >= 33 && ev.which <= 40) || (decPointCodes[0] != -1 && ev.which == 46));
 		} else if (ev.type == 'keyup') {
 			if(ev.which < 32 || (ev.which >= 33 && ev.which <= 40)) return false;
 
-			switch (ev.which) {
-				case 78: break; // N (Opera 9.63+ maps the "." from the number key section to the "N" key too!) (See: http://unixpapa.com/js/key.html search for ". Del")
-				case decPointCodes[2]: break; // . number block (Opera 9.63+ maps the "." from the number block to the "N" key (78) !!!)
-				case decPointCodes[1]: break; // .
-				default: return true;
+			if(decPointCodes[0] != -1) {
+				switch (ev.which) {
+					case 78: break; // N (Opera 9.63+ maps the "." from the number key section to the "N" key too!) (See: http://unixpapa.com/js/key.html search for ". Del")
+					case decPointCodes[2]: break; // . number block (Opera 9.63+ maps the "." from the number block to the "N" key (78) !!!)
+					case decPointCodes[1]: break; // .
+					default: return true;
+				}
 			}
 
 			return false;
