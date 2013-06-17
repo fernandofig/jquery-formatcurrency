@@ -112,7 +112,7 @@
 		$.extend(fcDefaults, settings);
 	};
 
-	$.formatCurrency.setAllDefaults = function(settings) {		
+	$.formatCurrency.setAllDefaults = function(settings) {
 		for (var prop in settings) {
 			if(fcDefaults.hasOwnProperty(prop)) fcDefaults[prop] = settings[prop];
 			if(fcLiveDefaults.hasOwnProperty(prop)) fcLiveDefaults[prop] = settings[prop];
@@ -145,6 +145,12 @@
 			var money = $.getFormattedCurrency(num, settings, true);
 			settings = money[4];
 
+			$this.data('fcMetadata', {
+				'hasDecimals': money[1],
+				'originalDecimals': money[2],
+				'isPositive': money[3]
+			});
+
 			if(!money) return;
 
 			// setup destination
@@ -159,7 +165,7 @@
 
 			if (money[1] &&
 				settings.eventOnDecimalsEntered &&
-				money[2].length > settings.roundToDecimalPlace) {
+				money[2].length > 0) {
 				$destination.trigger('decimalsEntered', money[2]);
 			}
 
@@ -206,7 +212,7 @@
 		var numParts = String(expr).split('.');
 		var hasDecimals = (numParts.length > 1 && settings.roundToDecimalPlace > -2);
 		var decimals = (hasDecimals ? numParts[1].toString() : '0');
-		var originalDecimals = decimals;
+		var originalDecimals = hasDecimals || decimals != '0' ? decimals : '';
 
 		// format number
 		expr = Math.abs(numParts[0]);
