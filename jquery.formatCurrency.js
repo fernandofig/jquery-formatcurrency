@@ -183,7 +183,8 @@
 		if (expr.search('\\(') >= 0)
 			expr = '-' + expr;
 
-		if (expr === '' || (expr === '-' && settings.roundToDecimalPlace === -1)) return;
+		if (expr === '' || (expr === '-' && settings.roundToDecimalPlace === -1))
+			return (returnMetadata ? [ expr, false, "", true, settings ] : "");
 
 		expr = expr.replace(settings.regexGroupDigit, ''); // Remove group digit for arithmetic
 
