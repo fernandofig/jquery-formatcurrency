@@ -211,8 +211,8 @@ $(function() {
 			equals($('.blankShouldBeBlank').html(), '', "blank should return blank"); 
 		});
 		
-		testFormat('.floatToCommaDecimal', { decimalSymbol: ',', digitGroupSymbol: '.', dropDecimals: false, groupDigits: true, symbol: '' }, function() {		
-			equals($('.floatToCommaDecimal').html(), '33.195,50', "formatting a float value should succeed"); 
+		testFormat('.floatToCommaDecimal', { decimalSymbol: ',', digitGroupSymbol: '.', parseAsFloat: true, groupDigits: true, symbol: '' }, function() {		
+			equals($('.floatToCommaDecimal').html(), '33.195,50', "formatting a float value should succeed");
 		});
 		
 		testFormat('.formatCurrencyWithBlankSymbol', { symbol: '' }, function() {		

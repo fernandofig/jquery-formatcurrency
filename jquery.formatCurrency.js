@@ -25,7 +25,8 @@
 		roundToDecimalPlace: 2, // roundToDecimalPlace: -2; for not allowing decimals; roundToDecimalPlace: -1; for no rounding; 0 to round to the dollar; 1 for one digit cents; 2 for two digit cents; 3 for three digit cents; ...
 		eventOnDecimalsEntered: false,
 		suppressCurrencySymbol: false,
-		removeTrailingZerosOnDecimal: false
+		removeTrailingZerosOnDecimal: false,
+		parseAsFloat: false
 	};
 	
 	var fcLiveDefaults = {
@@ -177,6 +178,11 @@
 	$.getFormattedCurrency = function (expr, settings, returnMetadata) {
 		settings = buildSettingsObjGraph(settings, fcDefaults);
 
+		if (settings.parseAsFloat) {
+			var tryFloat = parseFloat(expr);
+			expr = isNaN(tryFloat) ? expr : tryFloat;
+		}
+
 		expr = (typeof(expr) !== "string" ? expr.toString().replace('\.', settings.decimalSymbol) : expr);
 
 		//identify '(123)' as a negative number
@@ -186,6 +192,7 @@
 		if (expr === '' || (expr === '-' && settings.roundToDecimalPlace === -1))
 			return (returnMetadata ? [ expr, false, "", true, settings ] : "");
 
+		expr = expr.replace(settings.symbol, ''); // Remove currency symbol for arithmetic
 		expr = expr.replace(settings.regexGroupDigit, ''); // Remove group digit for arithmetic
 
 		if (settings.decimalSymbol != '.')
@@ -194,7 +201,7 @@
 		// if the number is valid use it, otherwise clean it
 		if (isNaN(expr)) {
 			// clean number
-			expr = expr.replace(settings.regex, '');
+			expr = expr.replace(settings.regexArithmetic, '');
 
 			if (expr === '' || (expr === '-' && settings.roundToDecimalPlace === -1))
 				expr = '0';
@@ -318,6 +325,7 @@
 			settings.parseType = validateParseType(settings.parseType);
 
 		// Generate regex for formatting
+		settings.regexArithmetic = new RegExp("[^\\d\\.\\-]", "g");
 		if (settings.symbol === '')
 			settings.regex = new RegExp("[^\\d" + settings.decimalSymbol + "-]", "g");
 		else {
