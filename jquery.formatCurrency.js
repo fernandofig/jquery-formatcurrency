@@ -249,7 +249,7 @@
 		// format symbol/negative
 		var format = isPositive ? settings.positiveFormat : settings.negativeFormat;
 		var money = format;
-		if (settings.symbol !== '') money = money.replace(/%s/g, settings.symbol);
+		money = money.replace(/%s/g, settings.symbol);
 		money = money.replace(/%n/g, expr);
 
 		return (returnMetadata ? [ money, hasDecimals, originalDecimals, isPositive, settings ] : money);
