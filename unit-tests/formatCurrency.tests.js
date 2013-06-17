@@ -114,14 +114,6 @@ $(function() {
 			equals($('.warnOnDecimalsEnteredBeforeRoundedNotification').html(), 'Please do not enter any cents! (0.456)', "Warn on decimals entered before they are rounded notification");
 		});
 
-		$('.onlyWarnOnDecimalsEnteredAsAppropriate').bind('decimalsEntered', function(e, cents, roundedTo) {
-			$('.onlyWarnOnDecimalsEnteredAsAppropriateNotification').html('Please do not enter any cents!' + ' (0.' + cents + ')');
-		});
-		testFormat('.onlyWarnOnDecimalsEnteredAsAppropriate', { roundToDecimalPlace: 2, eventOnDecimalsEntered: true }, function() {
-			equals(this.html(), '$123.45', "Only warn on decimals entered as appropriate, not here");
-			equals($('.onlyWarnOnDecimalsEnteredAsAppropriateNotification').html(), '', "Only warn on decimals entered as appropriate notification, not here");
-		});
-
 		testFormat('.roundOneUp', {}, function() {
 			equals(this.html(), '$124.00', "roundOneUp");
 		});
