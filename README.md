@@ -14,14 +14,16 @@ You can use the same options as on the original plugin, plus:
 
 #### suppressCurrencySymbol (boolean, default: false)
 
-Self-explanatory: doesn't include the Currency Symbol on the formatted output. It's basically a clearer alternative to specifying the option `symbol: ''`, with some modifications also to the formatting strings on the options **positiveFormat** and **negativeFormat** for consistency.
+Self-explanatory: doesn't include the Currency Symbol on the formatted output. It's basically a clearer alternative to specifying the option `symbol: ''`, with some modifications also to the formatting strings on the options `positiveFormat` and `negativeFormat` for consistency.
 
 #### removeTrailingZerosOnDecimal (boolean, default: false)
 
 On numbers with decimals, remove the trailing zeroes at the rightmost part of the decimal part, if any. e.g.:
 
-```
+```HTML
 <span id="example">1223.40</span>
+```
+```JavaScript
 $("#element").formatCurrency({ roundToDecimalPlace: 2 });  // Outputs $1,223.40
 $("#element").formatCurrency({ roundToDecimalPlace: 2, removeTrailingZerosOnDecimal: true });  // Outputs $1,223.4
 ```
@@ -52,7 +54,7 @@ Filters out any non-number and non-decimal-point-symbol when inputting data on t
 
 #### roundToDecimalPlace set to -2
 
-That option is also present on the original plugin, but it's extended on the context of Live formatting so that setting it to -2 blocks entering decimals entry entirely on the field - essentially by also filtering out the decimal point key, so it makes more sense only when filterKeys = true, but it will also work with filterKeys = false, it only means that typing decimals will trim off the decimal part once you leave the field.
+That option is also present on the original plugin, but it's extended on the context of Live formatting so that setting it to -2 blocks entering decimals entry entirely on the field - essentially by also filtering out the decimal point key, so it makes more sense only when `filterKeys = true`, but it will also work with `filterKeys = false`, it only means that typing decimals will trim off the decimal part once you leave the field.
 
 #### decPointCharCodes (array)
 
@@ -64,7 +66,7 @@ This is an array with exactly 3 elements containing keycodes for **decimal point
 
 The key codes are numbers, you should seek a Javascript reference to understand their contexts and a table of reference for the codes for each key themselves - this is outside the scope of this documentation. This option is usually setup automatically by the plugin anyway, **_it's not meant to be used directly_**, it's just exposed if you have a very specific need.
 
-**Note:** For the `formatCurrencyLive` method to be actually useful, you have to set at least one of the options formatOnBlur, formatOnType or filterKeys to true.
+**Note:** For the `formatCurrencyLive` method to be actually useful, you have to set at least one of the options `formatOnBlur`, `formatOnType` or `filterKeys` to **true**.
 
 ### "Static" methods
 
@@ -103,26 +105,26 @@ There are methods to setup the default settings for each method on the plugin. O
 
 #### $.formatCurrency.setAllDefaults(settings)
 
-This is a conveniency method that will set the defaults at once for all methods on the plugin: formatCurrency, formatCurrencyLive, toNumber and asNumber. Of course, not all settings options for a given method exists for other methods (e.g., "symbol" on formatCurrency is not applicable to the toNumber and asNumber methods), so you can pass all settings for all methods in the same object, and the setAllDefaults method will sort out which options belong on which method default, and which are applicable on all of them.
+This is a conveniency method that will set the defaults at once for all methods on the plugin: `formatCurrency`, `formatCurrencyLive`, `toNumber` and `asNumber`. Of course, not all settings options for a given method exists for other methods (e.g., `symbol` on `formatCurrency` is not applicable to the `toNumber` and `asNumber` methods), so you can pass all settings for all methods in the same object, and the `setAllDefaults` method will sort out which options belong on which method default, and which are applicable on all of them.
 
 #### $.formatCurrency.setDefaults(settings)
 
-Sets the default options for the formatCurrency method only
+Sets the default options for the `formatCurrency` method only
 
 #### $.formatCurrencyLive.setDefaults(settings)
 
-Sets the default options for the formatCurrencyLive method only
+Sets the default options for the `formatCurrencyLive` method only
 
 #### $.toNumber.setDefaults(settings)
 
-Sets the default options for the toNumber method only
+Sets the default options for the `toNumber` method only
 
 #### $.asNumber.setDefaults(settings)
 
-Sets the default options for the asNumber method only
+Sets the default options for the `asNumber` method only
 
 ## Breaking changes
 
 <sup>(Well, that should actually be "breaking change" for now, but who knows what's in the future for this? :-))</sup>
 
-On the original plugin, setting eventOnDecimalsEntered to true would raise a custom "decimalsEntered" event only, and only IF, the number of decimal digits entered are greater than the decimal places configured with the option roundToDecimalPlace. With my version, if eventOnDecimalsEntered  = true, the event is raised if any number of decimal digits is entered. I made this change because the previous behavior was confusing and inconsistent at first glance. If you need to check decimal part digits, you can still do it by using the second parameter on the callback function for the event, which will contain the decimals entered.
+On the original plugin, setting `eventOnDecimalsEntered` to **true** would raise a custom `decimalsEntered` event if, and only IF, the number of decimal digits entered are greater than the decimal places configured with the option `roundToDecimalPlace`. With my version, if `eventOnDecimalsEntered = true`, the event is raised if _any_ number of decimal digits is entered. I made this change because the previous behavior was confusing and inconsistent at first glance. If you need to check decimal part digits, you can still do it by using the second parameter on the callback function for the event, which will contain the decimals entered.
