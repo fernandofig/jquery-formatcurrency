@@ -38,7 +38,7 @@ That's the main new feature on my version of this plugin. This could be achieved
 
 `$("element").formatCurrencyLive({ options... });`
 
-On "options" you can use the same options as the standard formatCurrency method, plus a few more specific ones:
+On "options" you can use the same options as the standard `formatCurrency` method, plus a few more specific ones:
 
 #### formatOnBlur (boolean, default: true)
 
@@ -54,11 +54,11 @@ Filters out any non-number and non-decimal-point-symbol when inputting data on t
 
 #### roundToDecimalPlace set to -2
 
-That option is also present on the original plugin, but it's extended on the context of Live formatting so that setting it to -2 blocks entering decimals entry entirely on the field - essentially by also filtering out the decimal point key, so it makes more sense only when `filterKeys = true`, but it will also work with `filterKeys = false`, it only means that typing decimals will trim off the decimal part once you leave the field.
+That option is also present on the original plugin, but it's extended on the context of Live formatting so that setting it to `-2` blocks entering decimals entry entirely on the field - essentially by also filtering out the decimal point key, so it makes more sense only when `filterKeys = true`, but it will also work with `filterKeys = false`, it only means that typing decimals will trim off the decimal part once you leave the field.
 
 #### decPointCharCodes (array)
 
-This is an array with exactly 3 elements containing keycodes for **decimal points** in different contexts, with each element on the array representing each context, respectively:
+This is an array with exactly 3 elements containing keycodes for **decimal points** keypresses in different contexts, with each element on the array representing each context, respectively:
 
 * The key code for the keypress event
 * The key code for the keyup event for the decimal point on the main keyboard
@@ -105,7 +105,7 @@ There are methods to setup the default settings for each method on the plugin. O
 
 #### $.formatCurrency.setAllDefaults(settings)
 
-This is a conveniency method that will set the defaults at once for all methods on the plugin: `formatCurrency`, `formatCurrencyLive`, `toNumber` and `asNumber`. Of course, not all settings options for a given method exists for other methods (e.g., `symbol` on `formatCurrency` is not applicable to the `toNumber` and `asNumber` methods), so you can pass all settings for all methods in the same object, and the `setAllDefaults` method will sort out which options belong on which method default, and which are applicable on all of them.
+This is a conveniency method that will set the defaults at once for all methods on the plugin: `formatCurrency`, `formatCurrencyLive`, `toNumber` and `asNumber`. Of course, not all settings options for a given method exists for other methods (e.g., `symbol` on `formatCurrency` is not applicable to the `toNumber` and `asNumber` methods), so you can pass all settings for all methods in the same object, and the `setAllDefaults` method will sort out which options belong on which method defaults set, or which are applicable on some or all of them.
 
 #### $.formatCurrency.setDefaults(settings)
 
