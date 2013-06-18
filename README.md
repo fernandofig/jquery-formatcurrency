@@ -20,7 +20,8 @@ Self-explanatory: doesn't include the Currency Symbol on the formatted output. I
 
 On numbers with decimals, remove the trailing zeroes at the rightmost part of the decimal part, if any. e.g.:
 
-```<span id="example">1223.40</span>
+```
+<span id="example">1223.40</span>
 $("#element").formatCurrency({ roundToDecimalPlace: 2 });  // Outputs $1,223.40
 $("#element").formatCurrency({ roundToDecimalPlace: 2, removeTrailingZerosOnDecimal: true });  // Outputs $1,223.4
 ```
