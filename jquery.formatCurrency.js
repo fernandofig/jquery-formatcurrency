@@ -23,6 +23,7 @@
 		colorize: false,
 		region: '',
 		roundToDecimalPlace: 2, // roundToDecimalPlace: -2; for not allowing decimals; roundToDecimalPlace: -1; for no rounding; 0 to round to the dollar; 1 for one digit cents; 2 for two digit cents; 3 for three digit cents; ...
+		minimumDecimalPlaces: 9,
 		eventOnDecimalsEntered: false,
 		suppressCurrencySymbol: false,
 		removeTrailingZerosOnDecimal: false,
@@ -92,7 +93,7 @@
 				$this.off('keypress.formatCurrency')
 					.on('keypress.formatCurrency', function (ev) {
 						if (!keyAllowed(ev, settings.decPointCharCodes)) ev.preventDefault();
-					})
+					});
 
 			if (settings.formatOnType) {
 				var settingsFmtOnType = $.extend({}, settings, { roundToDecimalPlace: -1, removeTrailingZerosOnDecimal: false });
@@ -242,7 +243,10 @@
 		}
 
 		if ((hasDecimals && settings.roundToDecimalPlace == -1) || settings.roundToDecimalPlace > 0) {
-			if (settings.removeTrailingZerosOnDecimal) decimals = decimals.replace(/0+$/, '');
+			if (settings.removeTrailingZerosOnDecimal) {
+				decimals = decimals.replace(/0+$/, '');
+				if (decimals.length < settings.minimumDecimalPlaces) decimals = String(decimals + Array(settings.minimumDecimalPlaces+1).join('0')).slice(0,settings.minimumDecimalPlaces);
+			}
 			expr += (decimals.length > 0 ? settings.decimalSymbol + decimals : "");
 		}
 
@@ -318,6 +322,12 @@
 			settings.symbol = '';
 			settings.positiveFormat = $.trim(settings.positiveFormat.replace('%s', ''));
 			settings.negativeFormat = $.trim(settings.negativeFormat.replace('%s', '').replace(' %n', '%n'));
+		}
+
+		if (settings.roundToDecimalPlace >= -1) {
+			settings.minimumDecimalPlaces = (settings.roundToDecimalPlace == -1 || settings.minimumDecimalPlaces > settings.roundToDecimalPlace ? settings.roundToDecimalPlace : settings.minimumDecimalPlaces);
+		} else {
+			settings.minimumDecimalPlaces = 0;
 		}
 
 		// validate parseType if it exists (for the 'asNumber' settings object graph)
