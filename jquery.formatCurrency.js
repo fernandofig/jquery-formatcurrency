@@ -1,4 +1,4 @@
-﻿//  This file is part of the jQuery formatCurrency Plugin.
+//  This file is part of the jQuery formatCurrency Plugin.
 //
 //    The jQuery formatCurrency Plugin is free software: you can redistribute it
 //    and/or modify it under the terms of the GNU Lesser General Public License as published 
@@ -107,6 +107,8 @@
 				$this.on('blur.formatCurrency', function (ev) {
 					$(this).formatCurrency(settings);
 				});
+
+			$(this).formatCurrency(settings);
 		});
 	};
 
@@ -354,8 +356,11 @@
 		else if (ev.type == 'keypress' && ev.which == decPointCodes[0])
 			return (ev.target.value.indexOf(String.fromCharCode(decPointCodes[0])) == -1);
 		else if (ev.type == 'keypress') {
+			if (ev.ctrlKey && ev.key.toUpperCase() == "A") return true;
 			return (ev.which < 32 || (ev.which >= 33 && ev.which <= 40) || (decPointCodes[0] != -1 && ev.which == 46));
 		} else if (ev.type == 'keyup') {
+			if (ev.ctrlKey && ev.key.toUpperCase() == "A") return false;
+
 			if(ev.which < 32 || (ev.which >= 33 && ev.which <= 40)) return false;
 
 			if(decPointCodes[0] != -1) {
